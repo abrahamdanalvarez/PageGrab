@@ -22,7 +22,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = json.loads((ROOT / 'package.json').read_text())['version']
-ADDON_ID = 'openscreenshot@pghq.dev'
+ADDON_ID = 'screenshot@personal.local'
 
 
 class Fixture(http.server.BaseHTTPRequestHandler):
@@ -114,9 +114,9 @@ def main():
                 let ui;
                 try { ui=ChromeUtils.importESModule("moz-src:///browser/components/customizableui/CustomizableUI.sys.mjs"); }
                 catch { ui=ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs"); }
-                ui.CustomizableUI.addWidgetToArea("openscreenshot_pghq_dev-browser-action",ui.CustomizableUI.AREA_NAVBAR);
+                ui.CustomizableUI.addWidgetToArea("screenshot_personal_local-browser-action",ui.CustomizableUI.AREA_NAVBAR);
             ''')
-            driver.find_element(By.ID, 'openscreenshot_pghq_dev-BAP').click()
+            driver.find_element(By.ID, 'screenshot_personal_local-BAP').click()
             driver.set_context('content')
             new_editor(previous, via_progress=True)
             entry = history()[0]

@@ -34,7 +34,6 @@ import {
   IconArrow,
   IconBlur,
   IconCrop,
-  IconCoffee,
   IconCut,
   IconEyedropper,
   IconHighlight,
@@ -50,7 +49,6 @@ import {
   IconRedo,
   IconSelect,
   IconSpotlight,
-  IconStar,
   IconStep,
   IconText,
   IconTrash,
@@ -58,14 +56,6 @@ import {
 } from '../shared/icons';
 import { getSettings, setSettings } from '../shared/storage';
 import type { ArrowHead, BoxShape } from '../shared/types';
-import {
-  SUPPORT_PROJECT_URL,
-  openReviewPage,
-  markRatePromptShown,
-  remindRateLater,
-  recordExportSuccess,
-  shouldShowRatePrompt,
-} from '../shared/rating';
 import { labelForSource } from './capture-label';
 import { ZoomMenu } from './ZoomMenu';
 import { BeautifyMenu } from './BeautifyMenu';
@@ -274,37 +264,10 @@ export function App() {
     if (toolbarRef.current) syncRovingTabIndex(toolbarRef.current);
   }, [ed.hasImage]);
 
-  // A non-blocking prompt after successful exports, with a usage-based snooze.
-  const [ratePrompt, setRatePrompt] = useState(false);
-
-  async function recordSuccess() {
-    await recordExportSuccess();
-    if (await shouldShowRatePrompt()) {
-      await markRatePromptShown();
-      setRatePrompt(true);
-    }
-  }
-
-  async function openReviews() {
-    try {
-      await openReviewPage();
-      setRatePrompt(false);
-      setNavigationError(false);
-    } catch {
-      setNavigationError(true);
-    }
-  }
-
-  function dismissRatePrompt() {
-    void remindRateLater();
-    setRatePrompt(false);
-  }
-
   function copyToClipboard() {
     ed.copyImage()
       .then(() => {
         setCopyState('copied');
-        void recordSuccess();
       })
       .catch(() => setCopyState('failed'))
       .finally(() => setTimeout(() => setCopyState('idle'), 1500));
@@ -327,7 +290,6 @@ export function App() {
     };
     try {
       await ed.exportPdf(opts, ed.defaultFilename());
-      void recordSuccess();
     } catch {
       setPdfFailed(true);
       setTimeout(() => setPdfFailed(false), 1500);
@@ -531,21 +493,6 @@ export function App() {
             onClick={() => setExportOpen(true)}
           >
             {t('editorSaveImage')}
-          </button>
-          <button
-            class="btn-secondary labeled-action rate-btn"
-            title={t('editorRateTooltip')}
-            onClick={openReviews}
-          >
-            <IconStar size={18} />
-            <span>{t('editorRateLabel')}</span>
-          </button>
-          <button
-            class="btn-secondary labeled-action"
-            onClick={() => window.open(SUPPORT_PROJECT_URL, '_blank', 'noopener')}
-          >
-            <IconCoffee size={18} />
-            <span>{t('supportProject')}</span>
           </button>
         </div>
       </header>
@@ -764,32 +711,9 @@ export function App() {
         <ExportDialog
           ed={ed}
           onClose={() => setExportOpen(false)}
-          onSuccess={() => void recordSuccess()}
+          onSuccess={() => {}}
           closing={exportT.closing}
         />
-      ) : null}
-      {ratePrompt ? (
-        <div class="rate-prompt" role="region" aria-label={t('ratePromptHeadline')}>
-          <p class="rate-prompt-headline">{t('ratePromptHeadline')}</p>
-          <p class="rate-prompt-body">{t('ratePromptBody')}</p>
-          <div class="rate-prompt-actions">
-            <button class="btn-primary" onClick={openReviews}>
-              {t('ratePromptRate')}
-            </button>
-            <button
-              class="text-btn"
-              onClick={() => {
-                window.open(SUPPORT_PROJECT_URL, '_blank', 'noopener');
-                dismissRatePrompt();
-              }}
-            >
-              {t('supportProject')}
-            </button>
-            <button class="btn-secondary" onClick={dismissRatePrompt}>
-              {t('ratePromptLater')}
-            </button>
-          </div>
-        </div>
       ) : null}
       {sheetT.mounted ? (
         <ShortcutSheet onClose={() => setSheetOpen(false)} closing={sheetT.closing} />

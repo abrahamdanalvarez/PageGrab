@@ -1,4 +1,3 @@
-import { SUPPORT_PROJECT_URL, openReviewPage } from '../shared/rating';
 import { CaptureReturn } from './CaptureReturn';
 import { IS_FIREFOX, RECORDING_SUPPORTED } from '../shared/browser';
 import { useEffect, useRef, useState } from 'preact/hooks';
@@ -7,14 +6,11 @@ import type {
   CaptureMode,
   ExportFormat,
   PopupMessage,
-  PendingCaptureError,
   Settings,
 } from '../shared/types';
 import { DEFAULT_SETTINGS } from '../shared/types';
 import {
-  clearPendingCaptureError,
   getLastRegion,
-  getPendingCaptureError,
   getRecSettings,
   getSettings,
   hasLastCapture,
@@ -28,11 +24,9 @@ import {
   IconBolt,
   IconCamera,
   IconChevronRight,
-  IconCoffee,
   IconCopy,
   IconDownload,
   IconGear,
-  IconGift,
   IconGlobe,
   IconHistory,
   IconImage,
@@ -44,7 +38,6 @@ import {
   IconRegion,
   IconSelect,
   IconShield,
-  IconStar,
   IconTimer,
   IconVisible,
 } from '../shared/icons';
@@ -88,15 +81,6 @@ import { applyTheme, watchSystemTheme } from '../shared/theme';
 // i18n helper
 function t(id: string): string {
   return chrome.i18n.getMessage(id) ?? id;
-}
-
-// External link — open in a tab (a bare <a> would navigate the popup away).
-function openKofi() {
-  void chrome.tabs.create({ url: SUPPORT_PROJECT_URL });
-}
-
-function openCoolStuff() {
-  void chrome.tabs.create({ url: 'https://openscreenshot.app/cool-stuff' });
 }
 
 /**
@@ -244,9 +228,6 @@ export function App() {
   const [showSettings, setShowSettings] = useState(isSettingsPage);
   const [busy, setBusy] = useState<CaptureMode | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
-  const [pendingCaptureError, setPendingCaptureError] = useState<PendingCaptureError | null>(null);
-  const [reportDetail, setReportDetail] = useState('');
-  const [reportState, setReportState] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
   const [toasts, setToasts] = useState<Toast[]>(() => {
     const message = new URLSearchParams(location.search).get('captureError');
     return message ? [{ id: Date.now(), message, tone: 'error' }] : [];
@@ -287,34 +268,6 @@ export function App() {
     void hasLastCapture().then(setHasStash);
     void getLastRegion().then((r) => setHasRegion(r != null));
   }, []);
-
-  useEffect(() => {
-    void getPendingCaptureError().then((error) => {
-      if (error) {
-        setPendingCaptureError(error);
-        setReportDetail(error.detail);
-      }
-    });
-  }, []);
-
-  async function submitCaptureError(event: Event): Promise<void> {
-    event.preventDefault();
-    if (!pendingCaptureError || reportState === 'sending') return;
-    setReportState('sending');
-    try {
-      const response = await fetch('https://openscreenshot.app/api/capture-errors', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ ...pendingCaptureError, detail: reportDetail }),
-      });
-      if (!response.ok) throw new Error(`report failed: ${response.status}`);
-      await clearPendingCaptureError();
-      setReportState('sent');
-      setPendingCaptureError(null);
-    } catch {
-      setReportState('failed');
-    }
-  }
 
   // Live-update a "system" theme setting when the OS preference flips.
   useEffect(() => watchSystemTheme(() => void getSettings().then((s) => applyTheme(s.theme))), []);
@@ -673,14 +626,6 @@ export function App() {
   }
 
   if (!showSettings && activeTabProtected) {
-    const openPage = async (url: string) => {
-      try {
-        await chrome.tabs.create({ url });
-        window.close();
-      } catch {
-        pushToast(t('popupOpenFailed'), 'error');
-      }
-    };
     return (
       <main class="app restricted-page">
         <div class="brand">
@@ -692,9 +637,6 @@ export function App() {
           <p>{t('restrictedExplanation')}</p>
           <p>{t('restrictedInstructions')}</p>
         </div>
-        <button class="btn-secondary btn-primary" onClick={() => void openPage('https://pghq.dev')}>
-          {t('restrictedSample')}
-        </button>
         <nav class="restricted-links">
           <button
             class="link-btn"
@@ -705,12 +647,6 @@ export function App() {
             }
           >
             {t('settingsTitle')}
-          </button>
-          <button
-            class="link-btn"
-            onClick={() => void openPage('https://openscreenshot.app/support/')}
-          >
-            {t('restrictedHelp')}
           </button>
         </nav>
         {toasts.map((toast) => (
@@ -780,28 +716,6 @@ export function App() {
             </div>
           </>
         )}
-        {showSettings && (
-          <nav class="settings-nav-links" aria-label={t('settingsSupport')}>
-            <button
-              class="link-btn kofi-link"
-              title={t('editorRateTooltip')}
-              onClick={() => {
-                void openReviewPage().catch(() => pushToast(t('popupOpenFailed'), 'error'));
-              }}
-            >
-              <IconStar size={16} />
-              {t('editorRateLabel')}
-            </button>
-            <button class="link-btn kofi-link" onClick={openKofi} title={t('supportKofiTitle')}>
-              <IconCoffee size={16} />
-              {t('supportProject')}
-            </button>
-            <button class="link-btn kofi-link" onClick={openCoolStuff} title={t('coolStuffTitle')}>
-              <IconGift size={16} />
-              {t('footerCoolStuff')}
-            </button>
-          </nav>
-        )}
       </header>
 
       {isSettingsPage && <CaptureReturn />}
@@ -830,44 +744,8 @@ export function App() {
         ))}
       </div>
 
-      {pendingCaptureError && (
-        <form class="capture-error-report" onSubmit={submitCaptureError}>
-          <strong>{t('captureReportTitle')}</strong>
-          <p>{t('captureReportBody')}</p>
-          <label>
-            {t('captureReportDetails')}
-            <textarea
-              value={reportDetail}
-              rows={3}
-              maxlength={4000}
-              onInput={(event) =>
-                setReportDetail((event.currentTarget as HTMLTextAreaElement).value)
-              }
-            />
-          </label>
-          <button class="btn-secondary" type="submit" disabled={reportState === 'sending'}>
-            {reportState === 'sending' ? t('captureReportSending') : t('captureReportSend')}
-          </button>
-          {reportState === 'failed' && (
-            <p class="capture-error-report-status" role="alert">
-              {t('captureReportFailed')}
-            </p>
-          )}
-        </form>
-      )}
-      {reportState === 'sent' && (
-        <p class="capture-error-report-status" role="status">
-          {t('captureReportSent')}
-        </p>
-      )}
-
       {showSettings ? (
-        <SettingsView
-          settings={settings}
-          onChange={updateSettings}
-          onSetup={() => goSetup()}
-          onRate={() => void openReviewPage().catch(() => pushToast(t('popupOpenFailed'), 'error'))}
-        />
+        <SettingsView settings={settings} onChange={updateSettings} onSetup={() => goSetup()} />
       ) : (
         <>
           {!IS_FIREFOX && <PinHint />}
@@ -1117,13 +995,11 @@ function SettingsView({
   settings,
   onChange,
   onSetup,
-  onRate,
 }: {
   settings: Settings;
   onChange: (patch: Partial<Settings>) => void;
   /** Owned by App, which has the toast surface a failed handoff needs. */
   onSetup: () => void;
-  onRate: () => void;
 }) {
   const filenameRef = useRef<HTMLInputElement>(null);
   const [confirmReset, setConfirmReset] = useState(false);
@@ -1184,7 +1060,6 @@ function SettingsView({
       label: t('settingsKeyboardShortcuts'),
       icon: <IconKeyboard size={18} />,
     },
-    { id: 'set-support', label: t('supportProject'), icon: <IconCoffee size={18} /> },
   ];
   const delayIndex = Math.max(
     0,
@@ -1502,24 +1377,6 @@ function SettingsView({
         </section>
 
         <ShortcutSettings {...panel('set-shortcuts')} />
-
-        <section {...panel('set-support')} class="settings-group project-support">
-          <div class="card-head">
-            <span class="card-icon" aria-hidden="true">
-              <IconCoffee size={20} />
-            </span>
-            <h2 id="project-support-heading">{t('supportHeadline')}</h2>
-          </div>
-          <p class="settings-hint">{t('supportBody')}</p>
-          <div class="support-links">
-            <button class="btn-secondary" onClick={openKofi}>
-              {t('supportProject')}
-            </button>
-            <button class="link-btn" onClick={onRate}>
-              {t('editorRateLabel')}
-            </button>
-          </div>
-        </section>
 
         <footer class="settings-footer">
           <button

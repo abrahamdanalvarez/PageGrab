@@ -167,28 +167,15 @@ export function App() {
       </header>
 
       <div class="trust-strip" data-testid="trust-strip">
-        <a
-          class="trust-pill"
-          href="https://github.com/pghqdev/OpenScreenShot"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <span class="trust-pill">
           <SetupIcon id="code" /> {t('setupTrustOpenSource')}
-        </a>
+        </span>
         <span class="trust-pill">
           <SetupIcon id="shield" /> {t('setupTrustLocal')}
         </span>
         <span class="trust-pill">
           <SetupIcon id="eye-off" /> {t('setupTrustNoTracking')}
         </span>
-        <a
-          class="trust-pill"
-          href="https://openscreenshot.app/cool-stuff"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <SetupIcon id="gift" /> {t('setupCoolStuff')}
-        </a>
         <span class="trust-hint">{t('setupTrustHint')}</span>
       </div>
 

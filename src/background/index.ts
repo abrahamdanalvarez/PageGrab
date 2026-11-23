@@ -31,7 +31,6 @@ import {
   setLastCapture,
   setLastRegion,
   setSettings,
-  setPendingCaptureError,
 } from '../shared/storage';
 import {
   formatFilename,
@@ -49,7 +48,6 @@ import {
   MAX_CAPTURE_PARTS,
   splitHeight,
 } from '../shared/geometry';
-import { recordExportSuccess } from '../shared/rating';
 import {
   cropTile,
   getWindowViewport,
@@ -68,21 +66,6 @@ import { restoreRecBadge } from '@/background/recording';
 
 const EDITOR_URL = chrome.runtime.getURL('src/editor/index.html');
 const POPUP_URL = 'src/popup/index.html';
-/**
- * First-run page: a tall article that invites the first capture, hosted on the
- * site rather than bundled. It has to be an ordinary https page — Chrome
- * refuses script injection into a chrome-extension:// tab whatever the
- * manifest asks for, so a bundled welcome page is the one page the capture it
- * invites can never read. Carries the version and UI language only, same as
- * UNINSTALL_URL; the page reads `hl` to send the visitor to their own locale.
- */
-const WELCOME_URL = 'https://openscreenshot.app/welcome';
-/**
- * Where an uninstall lands (Surface D of the rating funnel). Query carries
- * the extension version and UI locale only — never a page URL, title, or
- * capture.
- */
-const UNINSTALL_URL = 'https://openscreenshot.app/uninstall';
 /** Icon context-menu checkbox that toggles express mode. */
 const MENU_EXPRESS_ID = 'oss-express';
 /** Page-menu and icon-menu items that open the settings pane in a tab. */
@@ -106,27 +89,11 @@ const CAPTURE_THROTTLE_MS = 500;
 /** Time to let the page paint/composite after each scroll before capturing. */
 const PAINT_SETTLE_MS = 60;
 
-// A fresh install opens the welcome page — a tall article built to make the
-// first one-click capture look good. Updates open nothing. The express
-// migration runs before the menus so the checkbox reads the post-migration
-// value.
+// The express migration runs before the menus so the checkbox reads the
+// post-migration value.
 chrome.runtime.onInstalled.addListener((details) => {
   void migrateExpressDefault(details.reason).then(() => createContextMenus());
-  if (!IS_FIREFOX && details.reason === 'install') void chrome.tabs.create({ url: welcomeUrl() });
 });
-
-/** The welcome URL with the same two values the uninstall URL carries. */
-function welcomeUrl(): string {
-  const manifest = chrome.runtime.getManifest();
-  return `${WELCOME_URL}?v=${manifest.version}&hl=${chrome.i18n.getUILanguage()}`;
-}
-
-// Registered on every worker start so it survives service-worker restarts.
-// Version and locale only — see UNINSTALL_URL.
-if (!IS_FIREFOX)
-  void chrome.runtime.setUninstallURL(
-    `${UNINSTALL_URL}?v=${chrome.runtime.getManifest().version}&hl=${chrome.i18n.getUILanguage()}`,
-  );
 
 /** Contexts the capture menu appears in — everywhere on a page. */
 const MENU_CONTEXTS: NonNullable<chrome.contextMenus.CreateProperties['contexts']> = [
@@ -861,7 +828,6 @@ async function deliverCapture(
       return false;
     }
     await finishCaptureProgress('clipboard', windowId, captureId);
-    void recordExportSuccess();
     void flashDoneBadge();
     return true;
   }
@@ -880,7 +846,6 @@ async function deliverCapture(
     return false;
   }
   await finishCaptureProgress('download', windowId, captureId);
-  void recordExportSuccess();
   void flashDoneBadge();
   return true;
 }
@@ -910,7 +875,6 @@ async function deliverCaptureParts(captureIds: string[], windowId: number): Prom
       });
       return false;
     }
-    void recordExportSuccess();
     void flashDoneBadge();
     return true;
   }
@@ -941,7 +905,6 @@ async function handleCaptureQuickAction(message: unknown): Promise<{ ok: boolean
       height: capture.height,
     });
     await downloadDataUrl(capture.dataUrl, `${base}.png`);
-    void recordExportSuccess();
     return { ok: true };
   } catch {
     return { ok: false };
@@ -978,14 +941,9 @@ function broadcast(msg: PopupMessage): void {
     // Keep the machine-readable failure visible in the service-worker console.
     // These expected capture failures do not pass through onCaptureError().
     console.warn('[OpenScreenShot] capture error', msg.code, msg.message);
-    void getActiveTab()
-      .then(async (tab) => {
-        await setPendingCaptureError(msg, tab ?? undefined).catch(() => {});
-        await showCaptureError(msg.message);
-      })
-      .catch(() => {
-        // Session storage is best effort; the badge still identifies a failure.
-      });
+    void showCaptureError(msg.message).catch(() => {
+      // Best effort; the badge still identifies a failure.
+    });
     void flashErrorBadge(msg.message);
   }
   // The popup may already be closed (e.g. region mode); ignore delivery failures.

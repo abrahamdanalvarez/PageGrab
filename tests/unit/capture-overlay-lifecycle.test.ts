@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { setLastCapture, setLastRegion } from '../../src/shared/storage';
 
 vi.mock('../../src/background/recording', () => ({ restoreRecBadge: vi.fn() }));
-vi.mock('../../src/shared/rating', () => ({ recordExportSuccess: vi.fn() }));
 vi.mock('../../src/shared/storage', () => ({
   getSettings: async () => ({
     captureDelay: 0,

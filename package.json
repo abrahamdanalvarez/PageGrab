@@ -8,11 +8,7 @@
   "engines": {
     "node": ">=22.19.0"
   },
-  "author": "OpenScreenShot @PGHQdev",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pghqdev/OpenScreenShot"
-  },
+  "author": "",
   "scripts": {
     "icons": "node scripts/generate-icons.mjs",
     "tokens": "node scripts/gen-design-tokens.mjs",
@@ -25,11 +21,6 @@
     "test:watch": "vitest",
     "build": "pnpm run tokens && tsc --noEmit && vite build",
     "package": "pnpm run build && rm -f openscreenshot-v$npm_package_version.zip && cd dist && zip -r -X ../openscreenshot-v$npm_package_version.zip .",
-    "site:build": "astro build --root site && node scripts/site-markdown.mjs && node scripts/site-lastmod.mjs",
-    "site:dev": "astro dev --root site",
-    "site:preview": "wrangler dev",
-    "site:deploy": "wrangler deploy",
-    "shots": "node scripts/shots/render.mjs",
     "smoke:a11y": "node tests/browser/a11y-smoke.mjs",
     "smoke:editor": "node tests/browser/editor-keyboard-smoke.mjs",
     "smoke:media": "node tests/browser/media-a11y-smoke.mjs",
@@ -43,19 +34,16 @@
     "build:firefox": "pnpm run tokens && tsc --noEmit && vite build --mode firefox",
     "dev:firefox": "vite --mode firefox",
     "package:firefox": "pnpm run build:firefox && web-ext build --source-dir dist-firefox --artifacts-dir . --filename openscreenshot-firefox-v{version}.zip --overwrite-dest",
-    "lint:firefox": "web-ext lint --source-dir dist-firefox",
-    "source:firefox": "node scripts/package-firefox-source.mjs"
+    "lint:firefox": "web-ext lint --source-dir dist-firefox"
   },
   "dependencies": {
     "preact": "^10.29.8"
   },
   "devDependencies": {
-    "@astrojs/sitemap": "^3.7.4",
     "@crxjs/vite-plugin": "^2.7.1",
     "@eslint/js": "^10.0.1",
     "@preact/preset-vite": "^2.10.6",
     "@types/chrome": "^0.2.9",
-    "astro": "^7.3.2",
     "axe-core": "^4.13.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.10.0",
@@ -63,13 +51,13 @@
     "fake-indexeddb": "^6.2.5",
     "globals": "^17.12.0",
     "prettier": "^3.9.6",
+    "puppeteer-core": "^25.18.1",
     "sharp": "^0.35.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.0",
     "vite": "^8.3.0",
     "vitest": "^5.0.0",
-    "web-ext": "^10.6.0",
-    "wrangler": "^4.131.0"
+    "web-ext": "^10.6.0"
   },
   "packageManager": "pnpm@10.33.0"
 }

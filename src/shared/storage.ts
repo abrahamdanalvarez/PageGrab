@@ -1,11 +1,4 @@
-import type {
-  CaptureError,
-  CaptureHistoryEntry,
-  LastCapture,
-  PageRect,
-  PendingCaptureError,
-  Settings,
-} from './types';
+import type { CaptureHistoryEntry, LastCapture, PageRect, Settings } from './types';
 import { DEFAULT_SETTINGS } from './types';
 import { DEFAULT_RECORDING_SETTINGS, type RecordingSettings } from './recording-types';
 import { makeThumbnail } from './thumbnail';
@@ -25,34 +18,6 @@ export async function getRecSettings(): Promise<RecordingSettings> {
 /** Persist recorder toggles as-is (caller merges the patch). */
 export async function setRecSettings(next: RecordingSettings): Promise<void> {
   await chrome.storage.local.set({ [REC_SETTINGS_KEY]: next });
-}
-export const PENDING_CAPTURE_ERROR_KEY = 'openscreenshot:pending-capture-error';
-
-export async function setPendingCaptureError(
-  error: CaptureError,
-  tab?: chrome.tabs.Tab,
-): Promise<void> {
-  const manifest = chrome.runtime.getManifest();
-  const pending: PendingCaptureError = {
-    code: error.code,
-    message: error.message,
-    detail: error.detail ?? '',
-    version: manifest.version,
-    locale: chrome.i18n.getUILanguage(),
-    url: tab?.url ?? '',
-    title: tab?.title ?? '',
-    createdAt: Date.now(),
-  };
-  await chrome.storage.session.set({ [PENDING_CAPTURE_ERROR_KEY]: pending });
-}
-
-export async function getPendingCaptureError(): Promise<PendingCaptureError | null> {
-  const stored = await chrome.storage.session.get(PENDING_CAPTURE_ERROR_KEY);
-  return (stored[PENDING_CAPTURE_ERROR_KEY] as PendingCaptureError | undefined) ?? null;
-}
-
-export async function clearPendingCaptureError(): Promise<void> {
-  await chrome.storage.session.remove(PENDING_CAPTURE_ERROR_KEY);
 }
 
 /** Load settings, merged over the defaults so new fields are always present. */

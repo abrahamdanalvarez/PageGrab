@@ -11,13 +11,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
-        with:
-          # site/astro.config.mjs derives SITE_LASTMOD from
-          # `git log -1 --format=%cI -- .` inside site/. On the default
-          # depth-1 clone that path-filtered log is empty whenever the tip
-          # commit did not touch site/, which drops lastmod from every
-          # sitemap URL without failing anything.
-          fetch-depth: 0
 
       - uses: pnpm/action-setup@v6
 
@@ -53,9 +46,6 @@ jobs:
 
       - name: Validate Firefox
         run: pnpm run lint:firefox
-
-      - name: Build the site
-        run: pnpm run site:build
 
       - name: Upload build
         uses: actions/upload-artifact@v7
@@ -94,17 +84,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Install the MCP server's dependencies
-        # puppeteer-core is not a devDependency of the root package — the MCP
-        # server vendors it, and tests/browser/dist-server.mjs walks up to
-        # mcp/node_modules to find it rather than adding a second copy.
-        run: npm ci --prefix mcp
-
-      - name: MCP server tests
-        # Runs before the smokes, so a flaky smoke cannot skip it. The tag's
-        # publish job runs the same tests, and a failure there blocks npm only.
-        run: npm test --prefix mcp
 
       - name: Generate icons
         run: pnpm run icons
