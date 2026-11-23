@@ -1,30 +1,28 @@
 /**
- * The "ink viewfinder" brand mark — same artwork as the toolbar icon
- * (scripts/generate-icons.mjs). Brand colors are fixed, not themed: the mark
- * is the paper tile in both light and dark UI, exactly as in the toolbar.
+ * The PageGrab brand mark: a page with a folded corner and a grab arrow on a
+ * blue tile. Same artwork as the toolbar icon (scripts/generate-icons.mjs).
+ * Brand colors are fixed, not themed, so the mark matches the toolbar icon.
  */
 export function BrandMark({ size = 24 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 128 128" aria-hidden="true">
-      <rect x="6" y="6" width="116" height="116" rx="30" fill="#FAFAF7" />
-      <rect
-        x="7.5"
-        y="7.5"
-        width="113"
-        height="113"
-        rx="28.5"
-        fill="none"
-        stroke="#1B1A17"
-        stroke-width="3"
-        opacity="0.14"
+      <rect x="6" y="6" width="116" height="116" rx="28" fill="#1E40AF" />
+      <path
+        d="M38 24 H74 L96 46 V100 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V30 a6 6 0 0 1 6 -6 Z"
+        fill="#FFFFFF"
       />
-      <g stroke="#1B1A17" stroke-width="11" stroke-linecap="round" fill="none">
-        <path d="M30 46 v-8 a8 8 0 0 1 8 -8 h8" />
-        <path d="M82 30 h8 a8 8 0 0 1 8 8 v8" />
-        <path d="M98 82 v8 a8 8 0 0 1 -8 8 h-8" />
-        <path d="M46 98 h-8 a8 8 0 0 1 -8 -8 v-8" />
+      <path d="M74 24 V40 a6 6 0 0 0 6 6 H96 Z" fill="#93C5FD" />
+      <g
+        stroke="#1E40AF"
+        stroke-width="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      >
+        <path d="M64 52 V84" />
+        <path d="M50 71 L64 85 L78 71" />
+        <path d="M46 96 H82" />
       </g>
-      <circle cx="64" cy="64" r="13" fill="#E8503A" />
     </svg>
   );
 }

@@ -6,22 +6,19 @@ import { mkdir } from 'node:fs/promises';
 const outDir = 'public/icons';
 
 /**
- * "Ink viewfinder": capture brackets in warm ink around a coral shutter dot,
- * on a paper tile with a faint keyline. Flat color throughout — deliberately
- * apart from the blue-gradient tiles the screenshot category defaults to.
- * The keyline keeps the paper tile visible on light toolbars.
+ * PageGrab mark: a page with a folded corner and a grab arrow on a blue tile.
+ * Keep in sync with src/shared/BrandMark.tsx.
  */
 function svg() {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
-  <rect x="6" y="6" width="116" height="116" rx="30" fill="#FAFAF7"/>
-  <rect x="7.5" y="7.5" width="113" height="113" rx="28.5" fill="none" stroke="#1B1A17" stroke-width="3" opacity="0.14"/>
-  <g stroke="#1B1A17" stroke-width="11" stroke-linecap="round" fill="none">
-    <path d="M30 46 v-8 a8 8 0 0 1 8 -8 h8"/>
-    <path d="M82 30 h8 a8 8 0 0 1 8 8 v8"/>
-    <path d="M98 82 v8 a8 8 0 0 1 -8 8 h-8"/>
-    <path d="M46 98 h-8 a8 8 0 0 1 -8 -8 v-8"/>
+  <rect x="6" y="6" width="116" height="116" rx="28" fill="#1E40AF"/>
+  <path d="M38 24 H74 L96 46 V100 a6 6 0 0 1 -6 6 H38 a6 6 0 0 1 -6 -6 V30 a6 6 0 0 1 6 -6 Z" fill="#FFFFFF"/>
+  <path d="M74 24 V40 a6 6 0 0 0 6 6 H96 Z" fill="#93C5FD"/>
+  <g stroke="#1E40AF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M64 52 V84"/>
+    <path d="M50 71 L64 85 L78 71"/>
+    <path d="M46 96 H82"/>
   </g>
-  <circle cx="64" cy="64" r="13" fill="#E8503A"/>
 </svg>`;
 }
 
