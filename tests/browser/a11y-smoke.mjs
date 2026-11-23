@@ -521,7 +521,8 @@ async function testEditor(browser, base, messages) {
   await page.waitForFunction(() => !document.querySelector('.sheet'), { timeout: 5000 });
 
   step('EDITOR — capture history shelf (task 28)');
-  await page.click(`button[title="${messages.editorCaptureHistory.message}"]`);
+  await page.click('.more-menu > button');
+  await page.click(`.more-item[title="${messages.editorCaptureHistory.message}"]`);
   await page.waitForSelector('.history-row', { timeout: 5000 });
   await settle(220); // see the export dialog step above
   await scan(page, 'editor capture history shelf');

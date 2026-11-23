@@ -60,19 +60,19 @@ export const TOOL_LIST: ToolDef[] = [
 ];
 
 /**
- * The tool rail's default: Select, the four most-used drawing tools, and
- * the two redaction tools. Everything else stays reachable behind the rail's
+ * The tool rail's default: Crop and Blur first (the usual edit before
+ * saving), then Select, then the four most-used drawing tools. Everything else stays reachable behind the rail's
  * More button ({@link overflowTools}) and through its shortcut letter. The
  * user can reorder the rail; that order lives in settings (`toolRail`).
  */
 export const PRIMARY_TOOLS: readonly Tool[] = [
+  'crop',
+  'blur',
   'select',
   'arrow',
   'rect',
   'text',
   'pen',
-  'blur',
-  'crop',
 ];
 
 /** The tools not on `rail`, in TOOL_LIST order — the More button's menu. */
@@ -121,10 +121,9 @@ export function removeFromRail(rail: readonly Tool[], tool: Tool): Tool[] {
 
 /**
  * Tool rail dividers: rendered after the tool whose id is a member, splitting
- * the primary column into Select / the drawing tools / the redaction tools.
- * The More button sits after the last divider's group.
+ * the primary column into Crop and Blur / Select / the drawing tools.
  */
-export const TOOL_DIVIDER_AFTER: ReadonlySet<Tool> = new Set(['select', 'pen']);
+export const TOOL_DIVIDER_AFTER: ReadonlySet<Tool> = new Set(['blur', 'select']);
 
 /** Per-tool options for {@link createShapeDraft} beyond the shared stroke style. */
 export interface ShapeDraftOptions {

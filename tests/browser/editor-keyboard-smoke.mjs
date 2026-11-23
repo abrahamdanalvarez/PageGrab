@@ -747,10 +747,7 @@ async function testStageErrorRetryAndDismiss(browser, base, messages) {
   // even those. Checked here, before Retry or Dismiss touch anything, which
   // is exactly the window the old checks got wrong.
   step('task 41: while the error overlay is up, Copy/Export/Zoom/Beautify are disabled');
-  assert(
-    (await page.$eval('.btn-fixed', (el) => el.disabled)) === true,
-    'Copy is disabled with no image decoded',
-  );
+  assert((await copyItemDisabled(page)) === true, 'Copy is disabled with no image decoded');
   assert(
     (await page.$eval('header .btn-primary[title^="Save image"]', (el) => el.disabled)) === true,
     'Export is disabled with no image decoded',
@@ -816,7 +813,7 @@ async function testStageErrorRetryAndDismiss(browser, base, messages) {
     (await page2.$eval('header .btn-primary[title^="Save image"]', (el) => el.disabled)) === true,
     'Export disables again — dismiss cleared capture, not just the message',
   );
-  assert((await page2.$eval('.btn-fixed', (el) => el.disabled)) === true, 'Copy disables too');
+  assert((await copyItemDisabled(page2)) === true, 'Copy disables too');
   assert(crashes.length === 0, `no page errors (${crashes.join(' | ') || 'none'})`);
   await page2.close();
 
@@ -4098,7 +4095,8 @@ async function testCaptureHistoryShelf(browser, base, messages) {
   await page.waitForSelector('.stage-canvas[aria-label*="400 by 300"]', { timeout: 5000 });
 
   step('task 28: opening the shelf lists both seeded entries, thumbnails included');
-  await page.click('button[title="History"]');
+  await openMoreMenu(page);
+  await page.click('.more-item[title="History"]');
   await page.waitForSelector('.modal[aria-label="History"]');
   // The row list loads async (listCaptureHistory reads storage) — wait for
   // it, rather than reading the modal's still-empty first render.
@@ -4186,7 +4184,8 @@ async function testCaptureHistoryShelf(browser, base, messages) {
   await page.waitForSelector('.stage-canvas[aria-label*="800 by 600"]', { timeout: 5000 });
 
   step('task 28: Delete needs a second click to confirm, then removes the row');
-  await page.click('button[title="History"]');
+  await openMoreMenu(page);
+  await page.click('.more-item[title="History"]');
   await page.waitForSelector('.modal[aria-label="History"]');
   const deleteBtn = '.history-row:nth-child(1) .history-delete-btn';
   await page.waitForSelector(deleteBtn, { timeout: 5000 });
@@ -4206,13 +4205,13 @@ async function testCaptureHistoryShelf(browser, base, messages) {
     'the second click actually deletes the row',
   );
 
-  step('task 28: Escape closes the shelf and returns focus to its trigger');
+  step('task 28: Escape closes the shelf and returns focus to the More menu');
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => !document.querySelector('.modal[aria-label="History"]'));
   const onTrigger = await page.evaluate(
-    () => document.activeElement === document.querySelector('button[title="History"]'),
+    () => document.activeElement === document.querySelector('.more-menu > button'),
   );
-  assert(onTrigger, 'focus returns to the History trigger on Escape');
+  assert(onTrigger, 'focus returns to the More menu, where History was opened, on Escape');
 
   assert(crashes.length === 0, `no page errors (${crashes.join(' | ') || 'none'})`);
   await page.close();
@@ -4246,8 +4245,25 @@ async function testCaptureHistoryShelf(browser, base, messages) {
  *     documentPictureInPicture instead, the same shape
  *     tests/unit/pin.test.ts stubs for the same branch.
  */
+/** Open the topbar's More menu (Copy, History, Pin, Shortcuts, Settings). */
+async function openMoreMenu(page) {
+  if (!(await page.$('.more-menu .zoom-popover'))) await page.click('.more-menu > button');
+  await page.waitForSelector('.more-menu .zoom-popover:not(.is-closing)', { timeout: 5000 });
+  // The menu's keyboard handling is live once it has moved focus inside.
+  await page.waitForFunction(() => !!document.activeElement?.closest('.more-menu .zoom-popover'));
+}
+
+/** Whether the More menu's Copy item is disabled; leaves the menu closed. */
+async function copyItemDisabled(page) {
+  await openMoreMenu(page);
+  const disabled = await page.$eval('.more-item[title^="Copy"]', (el) => el.disabled);
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => !document.querySelector('.more-menu .zoom-popover'));
+  return disabled;
+}
+
 async function testPinToFloatingWindow(browser, base, messages) {
-  const pinBtn = `button[aria-label="${messages.editorPinLabel.message}"]`;
+  const pinBtn = `.more-item[title="${messages.editorPinTitle.message}"]`;
 
   step('task 29: the Pin button is absent when Document Picture-in-Picture is unavailable');
   {
@@ -4266,6 +4282,7 @@ async function testPinToFloatingWindow(browser, base, messages) {
     await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
     await page.waitForSelector('.stage-canvas');
     await new Promise((r) => setTimeout(r, 900));
+    await openMoreMenu(page);
     assert(
       (await page.evaluate(() => window.documentPictureInPicture)) === undefined,
       'the override really reads as undefined, the way a browser without the API would',
@@ -4289,6 +4306,7 @@ async function testPinToFloatingWindow(browser, base, messages) {
   await page.waitForSelector('.stage-canvas');
   await new Promise((r) => setTimeout(r, 900));
 
+  await openMoreMenu(page);
   await page.waitForSelector(pinBtn, { timeout: 5000 });
   const pinTitle = await page.$eval(pinBtn, (el) => el.getAttribute('title'));
   assert(
@@ -4385,6 +4403,7 @@ async function testPinToFloatingWindow(browser, base, messages) {
   await page3.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page3.waitForSelector('.stage-canvas');
   await new Promise((r) => setTimeout(r, 900));
+  await openMoreMenu(page3);
   await page3.waitForSelector(pinBtn, { timeout: 5000 });
   await page3.click(pinBtn);
   await page3.waitForSelector('.stage-notice', { timeout: 5000 });

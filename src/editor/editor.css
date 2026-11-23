@@ -1762,45 +1762,51 @@ body {
   }
 }
 
-.express-bar {
-  display: flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: var(--s-3);
-  padding: var(--s-2) var(--s-3);
-  background: var(--surface-2);
-  border-bottom: 1px solid var(--border);
-  color: var(--text-2);
-  font-size: var(--fs-base);
-}
-.express-bar.is-on {
-  background: var(--accent-subtle);
-  color: var(--text-1);
-}
-.express-bar-icon {
+/* Express on/off, beside the capture-mode label. */
+.express-chip {
   display: inline-flex;
-  flex: 0 0 auto;
   align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
+  gap: 4px;
+  min-height: 24px;
+  padding: 1px 10px 1px 8px;
+  border: 1px solid var(--border);
   border-radius: var(--r-full);
-  background: var(--surface-1);
+  background: transparent;
   color: var(--text-3);
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  cursor: pointer;
 }
-.express-bar.is-on .express-bar-icon {
-  background: var(--accent-ink);
-  color: var(--on-accent);
+.express-chip:hover {
+  background: var(--surface-3);
 }
-.express-bar-copy {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin: 0;
+.express-chip.is-on {
+  border-color: transparent;
+  background: var(--accent-subtle);
+  color: var(--accent-ink);
 }
-.express-bar-copy strong {
-  color: var(--text-1);
-  font-weight: 600;
+.express-chip:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
 }
-.express-bar .switch {
-  flex: 0 0 auto;
+
+/* More menu rows: icon + label on the left, shortcut on the right. */
+.more-item:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.more-item-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+/* Frame is an extra, not a step on the way to saving: quiet until it is on. */
+.beautify-menu > .btn-secondary:not(.is-active) {
+  border-color: transparent;
+  background: transparent;
+}
+.beautify-menu > .btn-secondary:not(.is-active):hover:not(:disabled) {
+  background: var(--surface-3);
 }

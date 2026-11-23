@@ -32,6 +32,8 @@ import { BrandMark } from '../shared/BrandMark';
 import {
   IconAlert,
   IconArrow,
+  IconCopy,
+  IconKeyboard,
   IconBlur,
   IconCrop,
   IconCut,
@@ -61,7 +63,8 @@ import { ZoomMenu } from './ZoomMenu';
 import { BeautifyMenu } from './BeautifyMenu';
 import { stylebarEmpty, stylebarFields } from './stylebar';
 import { ShortcutSheet } from './ShortcutSheet';
-import { ExpressBar } from './ExpressBar';
+import { ExpressChip } from './ExpressChip';
+import { MoreMenu } from './MoreMenu';
 import { HistorySheet } from './HistorySheet';
 import { hasScreenPicker, openScreenPicker } from './eyedropper';
 import { hasPinWindow } from './pin';
@@ -379,6 +382,8 @@ export function App() {
           </span>
           <span class="brand-name">PageGrab</span>
           {ed.capture ? <span class="brand-mode">{labelForSource(ed.capture.mode)}</span> : null}
+          {/* After the capture load, so the editor's own settings read goes first. */}
+          {!ed.loading && <ExpressChip />}
         </div>
         {
           <div class="topbar-actions" role="group" aria-label={t('editorAriaDocumentActions')}>
@@ -415,40 +420,6 @@ export function App() {
           </div>
         }
         <div class="topbar-controls">
-          <button class="icon-btn labeled-action" onClick={() => void openSettings()}>
-            <IconGear size={16} />
-            <span>{t('settingsTitle')}</span>
-          </button>
-          <button
-            class="icon-btn labeled-action"
-            title={t('editorCaptureHistory')}
-            aria-label={t('editorCaptureHistory')}
-            onClick={() => setHistoryOpen(true)}
-          >
-            <IconHistory size={16} />
-            <span>{t('editorCaptureHistory')}</span>
-          </button>
-          {canPin ? (
-            <button
-              class="icon-btn labeled-action"
-              title={t('editorPinTitle')}
-              aria-label={t('editorPinLabel')}
-              disabled={!ed.capture}
-              onClick={ed.pinCapture}
-            >
-              <IconPictureInPicture size={16} />
-              <span>{t('editorPinLabel')}</span>
-            </button>
-          ) : null}
-          <button
-            class="icon-btn labeled-action"
-            title={t('editorShortcutsTitle')}
-            aria-label={t('editorShortcutsLabel')}
-            onClick={() => setSheetOpen(true)}
-          >
-            <span aria-hidden="true">?</span>
-            <span>{t('editorShortcutsLabel')}</span>
-          </button>
           <ZoomMenu
             zoomPct={ed.zoomPct}
             disabled={!ed.hasImage}
@@ -466,18 +437,54 @@ export function App() {
             imageSize={ed.imageSize}
             onChange={ed.setFrame}
           />
-          <button
-            class="btn-secondary btn-fixed"
-            title={t('editorCopyTitle')}
-            disabled={!ed.hasImage}
-            onClick={copyToClipboard}
-          >
-            {copyState === 'copied'
-              ? t('editorCopyDone')
-              : copyState === 'failed'
-                ? t('editorCopyFailed')
-                : t('editorCopyIdle')}
-          </button>
+          <MoreMenu
+            status={
+              copyState === 'copied'
+                ? t('editorCopyDone')
+                : copyState === 'failed'
+                  ? t('editorCopyFailed')
+                  : undefined
+            }
+            items={[
+              {
+                label: t('editorCopyIdle'),
+                title: t('editorCopyTitle'),
+                kbd: '⌘C',
+                icon: <IconCopy size={16} />,
+                disabled: !ed.hasImage,
+                onSelect: copyToClipboard,
+              },
+              {
+                label: t('editorCaptureHistory'),
+                title: t('editorCaptureHistory'),
+                icon: <IconHistory size={16} />,
+                onSelect: () => setHistoryOpen(true),
+              },
+              ...(canPin
+                ? [
+                    {
+                      label: t('editorPinLabel'),
+                      title: t('editorPinTitle'),
+                      icon: <IconPictureInPicture size={16} />,
+                      disabled: !ed.capture,
+                      onSelect: ed.pinCapture,
+                    },
+                  ]
+                : []),
+              {
+                label: t('editorShortcutsLabel'),
+                title: t('editorShortcutsTitle'),
+                kbd: '?',
+                icon: <IconKeyboard size={16} />,
+                onSelect: () => setSheetOpen(true),
+              },
+              {
+                label: t('settingsTitle'),
+                icon: <IconGear size={16} />,
+                onSelect: () => void openSettings(),
+              },
+            ]}
+          />
           <button
             class="btn-secondary"
             title={t('editorPdfTitle')}
@@ -498,8 +505,6 @@ export function App() {
       </header>
 
       {navigationError && <p role="alert">{t('popupOpenFailed')}</p>}
-      {/* After the capture load, so the editor's own settings read goes first. */}
-      {!ed.loading && <ExpressBar />}
       <StyleBar ed={ed} pointerActive={canvasPointerActive} />
 
       <div class="workspace">

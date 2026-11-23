@@ -271,7 +271,11 @@
   },
   "expressLabel": {
     "message": "One-click Express mode",
-    "description": "Name of the one-click express setting: the Settings card, the editor status bar switch, and the icon context-menu checkbox."
+    "description": "Name of the one-click express setting: the Settings card, the editor's Express chip, and the icon context-menu checkbox."
+  },
+  "editorExpressChip": {
+    "message": "Express",
+    "description": "Short visible text of the editor's Express on/off chip, beside the capture-mode label. The product name of the mode; keep it as in expressLabel."
   },
   "expressHint": {
     "message": "Turn off to choose Full Page, Visible Area, or Selected Region each time.",

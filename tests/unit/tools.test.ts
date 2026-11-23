@@ -393,6 +393,6 @@ describe('custom tool rail', () => {
 
   it('knows the default order from a custom one', () => {
     expect(isDefaultRail(PRIMARY_TOOLS)).toBe(true);
-    expect(isDefaultRail(placeOnRail(PRIMARY_TOOLS, 'crop', 0))).toBe(false);
+    expect(isDefaultRail(placeOnRail(PRIMARY_TOOLS, 'pen', 0))).toBe(false);
   });
 });

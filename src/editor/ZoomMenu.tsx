@@ -17,10 +17,11 @@ export interface ZoomMenuProps {
 }
 
 /**
- * The zoom readout doubles as the menu trigger. Frequent zoom lives on the
- * keyboard and the wheel, so the topbar carries one control rather than five.
+ * Open/close, focus and keyboard handling shared by the topbar's dropdown
+ * menus (zoom, More). Spread `triggerProps` on the trigger button, put
+ * `wrapRef` on the wrapper and `popoverRef` on the role="menu" element.
  */
-export function ZoomMenu(props: ZoomMenuProps) {
+export function useMenu() {
   const [open, setOpen] = useState(false);
   const { mounted, closing } = useExitDelay(open, DUR_MID);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -96,26 +97,40 @@ export function ZoomMenu(props: ZoomMenuProps) {
     setOpen(true);
   }
 
+  const triggerProps = {
+    ref: triggerRef,
+    'aria-haspopup': 'menu' as const,
+    'aria-expanded': open,
+    onClick: () => (open ? setOpen(false) : openMenu('first')),
+    onKeyDown: (e: KeyboardEvent) => {
+      if (open) return; // the window listener owns keys once it's open
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        openMenu('first');
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        openMenu('last');
+      }
+    },
+  };
+
+  return { mounted, closing, wrapRef, popoverRef, triggerProps, run };
+}
+
+/**
+ * The zoom readout doubles as the menu trigger. Frequent zoom lives on the
+ * keyboard and the wheel, so the topbar carries one control rather than five.
+ */
+export function ZoomMenu(props: ZoomMenuProps) {
+  const { mounted, closing, wrapRef, popoverRef, triggerProps, run } = useMenu();
+
   return (
     <div class="zoom-menu" ref={wrapRef}>
       <button
-        ref={triggerRef}
+        {...triggerProps}
         class="zoom-trigger"
         disabled={props.disabled}
-        aria-haspopup="menu"
-        aria-expanded={open}
         title={t('editorZoomTitle')}
-        onClick={() => (open ? setOpen(false) : openMenu('first'))}
-        onKeyDown={(e) => {
-          if (open) return; // the window listener above owns keys once it's open
-          if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            openMenu('first');
-          } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            openMenu('last');
-          }
-        }}
       >
         {/*
           No aria-live here: this span is part of the trigger's own accessible

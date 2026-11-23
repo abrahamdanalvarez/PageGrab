@@ -273,6 +273,10 @@
     "message": "ワンクリック Express モード",
     "description": "Name of the one-click express setting: the Settings card, the editor status bar switch, and the icon context-menu checkbox."
   },
+  "editorExpressChip": {
+    "message": "Express",
+    "description": "Short visible text of the editor's Express on/off chip, beside the capture-mode label. The product name of the mode; keep it as in expressLabel."
+  },
   "expressHint": {
     "message": "オフにすると、毎回「ページ全体」「表示領域」「選択範囲」から選べます。",
     "description": "Hint shown under the express row when express mode is on."

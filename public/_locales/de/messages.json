@@ -273,6 +273,10 @@
     "message": "Ein-Klick-Express-Modus",
     "description": "Name of the one-click express setting: the Settings card, the editor status bar switch, and the icon context-menu checkbox."
   },
+  "editorExpressChip": {
+    "message": "Express",
+    "description": "Short visible text of the editor's Express on/off chip, beside the capture-mode label. The product name of the mode; keep it as in expressLabel."
+  },
   "expressHint": {
     "message": "Deaktivieren, um jedes Mal zwischen Ganze Seite, Sichtbarer Bereich oder Ausschnitt zu wählen.",
     "description": "Hint shown under the express row when express mode is on."
