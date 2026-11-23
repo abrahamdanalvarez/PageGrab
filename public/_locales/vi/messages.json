@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "Chụp toàn trang & quay màn hình - OpenScreenShot",
+    "message": "Chụp toàn trang & quay màn hình - PageGrab",
     "description": "Extension name shown in Chrome UI."
   },
   "extNameFirefox": {
-    "message": "Chụp toàn trang - OpenScreenShot",
+    "message": "Chụp toàn trang - PageGrab",
     "description": "Extension name in the Firefox build, which takes screenshots only and has no recorder."
   },
   "extDesc": {
@@ -116,11 +116,11 @@
     "description": "One-time editor note after the update that made a toolbar click capture the full page."
   },
   "setupPinTitle": {
-    "message": "Ghim OpenScreenShot",
+    "message": "Ghim PageGrab",
     "description": "Popup: nudge to pin the extension, shown while it is not on the toolbar."
   },
   "setupPinSub": {
-    "message": "Nhấp vào 🧩 ở trên, rồi nhấp 📌 bên cạnh OpenScreenShot.",
+    "message": "Nhấp vào 🧩 ở trên, rồi nhấp 📌 bên cạnh PageGrab.",
     "description": "Popup: how to pin — the puzzle menu sits directly above the popup."
   },
   "editorCopyIdle": {

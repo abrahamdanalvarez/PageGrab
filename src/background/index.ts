@@ -8,7 +8,7 @@ import {
 import { downloadDataUrl } from '../shared/download';
 import { IS_FIREFOX } from '../shared/browser';
 /**
- * OpenScreenShot background service worker.
+ * PageGrab background service worker.
  *
  * Coordinates capture requests from the popup (and keyboard commands) and runs
  * them against the active tab using `activeTab` + `scripting` — no broad host
@@ -67,10 +67,10 @@ import { restoreRecBadge } from '@/background/recording';
 const EDITOR_URL = chrome.runtime.getURL('src/editor/index.html');
 const POPUP_URL = 'src/popup/index.html';
 /** Icon context-menu checkbox that toggles express mode. */
-const MENU_EXPRESS_ID = 'oss-express';
+const MENU_EXPRESS_ID = 'pagegrab-express';
 /** Page-menu and icon-menu items that open the settings pane in a tab. */
-const MENU_SETTINGS_ID = 'oss-settings';
-const MENU_ICON_SETTINGS_ID = 'oss-icon-settings';
+const MENU_SETTINGS_ID = 'pagegrab-settings';
+const MENU_ICON_SETTINGS_ID = 'pagegrab-icon-settings';
 /**
  * Icon context-menu capture items. With express mode hijacking the icon
  * click, the icon's right-click menu is where the other modes stay one
@@ -78,10 +78,10 @@ const MENU_ICON_SETTINGS_ID = 'oss-icon-settings';
  * under the page parent and on the action context.
  */
 const ICON_MENU_IDS: Record<CaptureMode, string> = {
-  'full-page': 'oss-icon-full-page',
-  visible: 'oss-icon-visible',
-  region: 'oss-icon-region',
-  element: 'oss-icon-element',
+  'full-page': 'pagegrab-icon-full-page',
+  visible: 'pagegrab-icon-visible',
+  region: 'pagegrab-icon-region',
+  element: 'pagegrab-icon-element',
 };
 
 /** Minimum gap between `captureVisibleTab` calls — Chrome throttles to ~2/sec. */
@@ -111,7 +111,7 @@ const MENU_CONTEXTS: NonNullable<chrome.contextMenus.CreateProperties['contexts'
  *
  * `onInstalled` can fire twice close together (a reload while a prior
  * install/update event is still being handled), and two runs of this
- * function racing was the cause of a "duplicate id oss-express" error users
+ * function racing was the cause of a "duplicate id pagegrab-express" error users
  * hit in the wild. `createContextMenusOnce` reads settings *before* clearing
  * the menus so no `await` sits between `removeAll()` and the last `create()`
  * — a competing run can no longer interleave partway through. This wrapper
@@ -139,8 +139,8 @@ async function createContextMenusOnce(): Promise<void> {
   const { expressMode } = await getSettings();
   await chrome.contextMenus.removeAll();
   chrome.contextMenus.create({
-    id: 'oss-parent',
-    title: 'OpenScreenShot',
+    id: 'pagegrab-parent',
+    title: 'PageGrab',
     contexts: MENU_CONTEXTS,
   });
   const titles: Record<CaptureMode, string> = {
@@ -152,7 +152,7 @@ async function createContextMenusOnce(): Promise<void> {
   for (const mode of ['full-page', 'visible', 'region', 'element'] as const) {
     chrome.contextMenus.create({
       id: MENU_IDS[mode],
-      parentId: 'oss-parent',
+      parentId: 'pagegrab-parent',
       title: titles[mode],
       contexts: MENU_CONTEXTS,
     });
@@ -164,7 +164,7 @@ async function createContextMenusOnce(): Promise<void> {
   }
   chrome.contextMenus.create({
     id: MENU_SETTINGS_ID,
-    parentId: 'oss-parent',
+    parentId: 'pagegrab-parent',
     title: chrome.i18n.getMessage('settingsTitle'),
     contexts: MENU_CONTEXTS,
   });
@@ -255,7 +255,7 @@ async function ensureRepeatMenuItem(): Promise<void> {
   chrome.contextMenus.create(
     {
       id: MENU_REPEAT_ID,
-      parentId: 'oss-parent',
+      parentId: 'pagegrab-parent',
       title: chrome.i18n.getMessage('repeatLastRegion'),
       contexts: MENU_CONTEXTS,
     },
@@ -927,7 +927,7 @@ function commandToMode(command: string): CaptureMode | null {
 }
 
 function onCaptureError(err: unknown): void {
-  console.error('[OpenScreenShot] capture failed', err);
+  console.error('[PageGrab] capture failed', err);
   broadcast({
     type: 'CAPTURE_ERROR',
     code: 'unknown',
@@ -940,7 +940,7 @@ function broadcast(msg: PopupMessage): void {
   if (msg.type === 'CAPTURE_ERROR') {
     // Keep the machine-readable failure visible in the service-worker console.
     // These expected capture failures do not pass through onCaptureError().
-    console.warn('[OpenScreenShot] capture error', msg.code, msg.message);
+    console.warn('[PageGrab] capture error', msg.code, msg.message);
     void showCaptureError(msg.message).catch(() => {
       // Best effort; the badge still identifies a failure.
     });

@@ -161,7 +161,7 @@ try {
   await page.addScriptTag({ content: script.code });
   const outer = await page.evaluate(() => {
     const metrics = window.captureModule.getMetrics(true);
-    return { metrics, id: document.querySelector('[data-oss-scroller="1"]')?.id };
+    return { metrics, id: document.querySelector('[data-pagegrab-scroller="1"]')?.id };
   });
   assert.equal(outer.id, 'main', 'an off-screen nested scroller is skipped');
   assert.deepEqual(outer.metrics.container, { x: 0, y: 0, width: 800, height: 600 });
@@ -174,7 +174,7 @@ try {
   const expansion = await page.evaluate(() => {
     const before = document.documentElement.outerHTML;
     const metrics = window.captureModule.getMetrics(true);
-    const expanded = [...document.querySelectorAll('[data-oss-expanded]')].map((el) => el.id);
+    const expanded = [...document.querySelectorAll('[data-pagegrab-expanded]')].map((el) => el.id);
     const tableHeight = document.querySelector('#table').clientHeight;
     window.captureModule.restoreCapture();
     return {
@@ -203,7 +203,7 @@ try {
   await page.addScriptTag({ content: script.code });
   const pinned = await page.evaluate(() => {
     const metrics = window.captureModule.getMetrics(true);
-    return { metrics, id: document.querySelector('[data-oss-scroller="1"]')?.id };
+    return { metrics, id: document.querySelector('[data-pagegrab-scroller="1"]')?.id };
   });
   assert.equal(pinned.id, 'main', 'a small overflow in a pinned shell still wins');
   assert.equal(pinned.metrics.scrollHeight, 770);

@@ -1,6 +1,6 @@
 /* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: design.md · designed-as-app */
 /*
- * OpenScreenShot recorder editor styles. Design tokens (spacing, radius,
+ * PageGrab recorder editor styles. Design tokens (spacing, radius,
  * shadows, typography, light/dark themes) live in src/shared/tokens.css and
  * are shared with the popup and editor. This file only holds recorder
  * surface styles.

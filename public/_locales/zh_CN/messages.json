@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "网页整页截图和录屏 - OpenScreenShot",
+    "message": "网页整页截图和录屏 - PageGrab",
     "description": "Extension name shown in Chrome UI."
   },
   "extNameFirefox": {
-    "message": "网页整页截图 - OpenScreenShot",
+    "message": "网页整页截图 - PageGrab",
     "description": "Extension name in the Firefox build, which takes screenshots only and has no recorder."
   },
   "extDesc": {
@@ -792,11 +792,11 @@
     "description": "Setup page: one-line assurance under the trust pills."
   },
   "setupPinTitle": {
-    "message": "固定 OpenScreenShot",
+    "message": "固定 PageGrab",
     "description": "Popup: nudge to pin the extension, shown while it is not on the toolbar."
   },
   "setupPinSub": {
-    "message": "点击上方的 🧩，再点击 OpenScreenShot 旁边的 📌。",
+    "message": "点击上方的 🧩，再点击 PageGrab 旁边的 📌。",
     "description": "Popup: how to pin — the puzzle menu sits directly above the popup."
   },
   "setupFromRecord": {
@@ -1770,7 +1770,7 @@
     "description": "Editor: heading shown over the empty-state overlay."
   },
   "editorCaptureHint": {
-    "message": "用 OpenScreenShot 截取一个页面，它就会在这里打开。",
+    "message": "用 PageGrab 截取一个页面，它就会在这里打开。",
     "description": "Editor: empty-state body text."
   },
   "editorDropHint": {
@@ -1782,7 +1782,7 @@
     "description": "Editor: empty-state button that opens the popup."
   },
   "editorOpenExtensionIcon": {
-    "message": "点击工具栏中的 OpenScreenShot 图标。",
+    "message": "点击工具栏中的 PageGrab 图标。",
     "description": "Editor: empty-state fallback text shown when openPopup() fails."
   },
   "editorReplaceImage": {
@@ -2134,7 +2134,7 @@
     }
   },
   "editorPinWindowTitle": {
-    "message": "已固定的截图（随编辑实时更新）- OpenScreenShot",
+    "message": "已固定的截图（随编辑实时更新）- PageGrab",
     "description": "Editor: the pinned floating window’s document title."
   },
   "editorPinnedCaptureAlt": {
@@ -2408,7 +2408,7 @@
     "description": "Editor topbar: tooltip on the Rate star."
   },
   "ratePromptHeadline": {
-    "message": "OpenScreenShot 帮到你了吗？",
+    "message": "PageGrab 帮到你了吗？",
     "description": "One-time post-export rate prompt: headline."
   },
   "ratePromptBody": {
@@ -2619,7 +2619,7 @@
     "description": "Toolbar popup shown on browser-restricted pages."
   },
   "restrictedInstructions": {
-    "message": "打开示例页面，然后在新标签页中点击 OpenScreenShot 图标。",
+    "message": "打开示例页面，然后在新标签页中点击 PageGrab 图标。",
     "description": "Toolbar popup shown on browser-restricted pages."
   },
   "restrictedSample": {
@@ -2640,7 +2640,7 @@
   },
   "supportBody": {
     "description": "Optional project support and rating message.",
-    "message": "OpenScreenShot 完全开源。如果它对你有帮助，捐赠可以支持项目开发，简短的评价也能帮助更多人发现它。"
+    "message": "PageGrab 完全开源。如果它对你有帮助，捐赠可以支持项目开发，简短的评价也能帮助更多人发现它。"
   },
   "capturePasteHint": {
     "message": "按 ⌘V / Ctrl+V 粘贴到任意位置。",
@@ -2658,7 +2658,7 @@
     "message": "Help diagnose this capture error"
   },
   "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve OpenScreenShot."
+    "message": "Review the details, then send an anonymous error report to help improve PageGrab."
   },
   "captureReportDetails": {
     "message": "Technical details (optional)"
@@ -2726,11 +2726,11 @@
     "description": "Recording control tab: camera preview placeholder while the camera opens."
   },
   "ctlCameraBlocked": {
-    "message": "OpenScreenShot 的摄像头已被阻止。录制将在没有摄像头的情况下继续。",
+    "message": "PageGrab 的摄像头已被阻止。录制将在没有摄像头的情况下继续。",
     "description": "Recording control tab: camera preview placeholder when the camera is blocked or missing."
   },
   "ctlMicBlocked": {
-    "message": "OpenScreenShot 的麦克风已被阻止。录制将在没有麦克风的情况下继续。",
+    "message": "PageGrab 的麦克风已被阻止。录制将在没有麦克风的情况下继续。",
     "description": "Recording control tab: note when the microphone is blocked or missing."
   },
   "ctlFixPermissions": {
@@ -2780,7 +2780,7 @@
     "description": "Recording control tab: button that switches to the tab being recorded."
   },
   "ctlNoTarget": {
-    "message": "请在要录制的标签页上，通过工具栏中的 OpenScreenShot 图标打开此页面。",
+    "message": "请在要录制的标签页上，通过工具栏中的 PageGrab 图标打开此页面。",
     "description": "Recording control tab: shown when the page was opened without a tab to record."
   }
 }

@@ -132,9 +132,9 @@ async function queryDeviceStates(): Promise<{ camera: DevicePermission; mic: Dev
   return { camera, mic };
 }
 
-const CONTINUE_SESSION_KEY = 'openscreenshot:continue-session';
+const CONTINUE_SESSION_KEY = 'pagegrab:continue-session';
 /** Mirrors `src/background/recording.ts`: a finished session whose tab failed to open. */
-const UNOPENED_SESSION_KEY = 'openscreenshot:unopened-session';
+const UNOPENED_SESSION_KEY = 'pagegrab:unopened-session';
 
 /** mm:ss from recorded ms, pauses already excluded by the caller. */
 function formatElapsed(ms: number): string {
@@ -630,7 +630,7 @@ export function App() {
       <main class="app restricted-page">
         <div class="brand">
           <BrandMark size={28} />
-          <span class="brand-name">OpenScreenShot</span>
+          <span class="brand-name">PageGrab</span>
         </div>
         <div class="restricted-copy">
           <h1>{t('restrictedTitle')}</h1>
@@ -690,7 +690,7 @@ export function App() {
               <span class="brand-mark" aria-hidden="true">
                 <BrandMark size={28} />
               </span>
-              <span class="brand-name">OpenScreenShot</span>
+              <span class="brand-name">PageGrab</span>
             </div>
             <div class="header-actions">
               <button

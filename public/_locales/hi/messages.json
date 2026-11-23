@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "पूरे पेज का स्क्रीनशॉट और स्क्रीन रिकॉर्डर - OpenScreenShot",
+    "message": "पूरे पेज का स्क्रीनशॉट और स्क्रीन रिकॉर्डर - PageGrab",
     "description": "Extension name shown in Chrome UI."
   },
   "extNameFirefox": {
-    "message": "पूरे पेज का स्क्रीनशॉट - OpenScreenShot",
+    "message": "पूरे पेज का स्क्रीनशॉट - PageGrab",
     "description": "Extension name in the Firefox build, which takes screenshots only and has no recorder."
   },
   "extDesc": {
@@ -116,11 +116,11 @@
     "description": "One-time editor note after the update that made a toolbar click capture the full page."
   },
   "setupPinTitle": {
-    "message": "OpenScreenShot पिन करें",
+    "message": "PageGrab पिन करें",
     "description": "Popup: nudge to pin the extension, shown while it is not on the toolbar."
   },
   "setupPinSub": {
-    "message": "ऊपर 🧩 पर क्लिक करें, फिर OpenScreenShot के आगे 📌 पर।",
+    "message": "ऊपर 🧩 पर क्लिक करें, फिर PageGrab के आगे 📌 पर।",
     "description": "Popup: how to pin — the puzzle menu sits directly above the popup."
   },
   "editorCopyIdle": {

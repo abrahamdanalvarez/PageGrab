@@ -10,9 +10,9 @@ import { DEFAULT_SETTINGS } from '../../src/shared/types';
  * the default, the one-shot flip, and the note handoff to the editor.
  */
 
-const SETTINGS_KEY = 'openscreenshot:settings';
-const MIGRATED_KEY = 'openscreenshot:express-default-migrated';
-const NOTE_KEY = 'openscreenshot:express-note-pending';
+const SETTINGS_KEY = 'pagegrab:settings';
+const MIGRATED_KEY = 'pagegrab:express-default-migrated';
+const NOTE_KEY = 'pagegrab:express-note-pending';
 
 /** In-memory `chrome.storage.local` accepting the string-or-array `get`
  * shapes the migration and note reads actually use. */

@@ -12,7 +12,7 @@ import type { ThemePreference } from './types';
  * unbundled classic script (see its own module doc) — so the key is
  * duplicated there. Keep the two in sync by hand.
  */
-export const THEME_MIRROR_KEY = 'openscreenshot:theme-mirror';
+export const THEME_MIRROR_KEY = 'pagegrab:theme-mirror';
 
 /** Resolve a stored preference against the live OS preference into a concrete theme. */
 export function resolveTheme(pref: ThemePreference, prefersDark: boolean): 'light' | 'dark' {

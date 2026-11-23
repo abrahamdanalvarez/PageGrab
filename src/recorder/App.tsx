@@ -51,7 +51,7 @@ function formatBytes(bytes: number): string {
 
 // Popup reads this to prefill "Continue recording" on the tab it's opened on
 // (the recorder page is a separate tab and can't hand off the capture itself).
-const CONTINUE_SESSION_KEY = 'openscreenshot:continue-session';
+const CONTINUE_SESSION_KEY = 'pagegrab:continue-session';
 
 function sessionIdFromLocation(): string | null {
   return new URLSearchParams(window.location.search).get('session');

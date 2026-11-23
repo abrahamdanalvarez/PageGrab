@@ -22,7 +22,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = json.loads((ROOT / 'package.json').read_text())['version']
-ADDON_ID = 'screenshot@personal.local'
+ADDON_ID = 'pagegrab@personal.local'
 
 
 class Fixture(http.server.BaseHTTPRequestHandler):
@@ -46,7 +46,7 @@ class Fixture(http.server.BaseHTTPRequestHandler):
 def main():
     server = http.server.HTTPServer(('127.0.0.1', 0), Fixture)
     threading.Thread(target=server.serve_forever, daemon=True).start()
-    with tempfile.TemporaryDirectory(prefix='oss-firefox-downloads-') as downloads:
+    with tempfile.TemporaryDirectory(prefix='pagegrab-firefox-downloads-') as downloads:
         options = Options()
         if os.environ.get('FIREFOX_BIN'):
             options.binary_location = os.environ['FIREFOX_BIN']
@@ -67,7 +67,7 @@ def main():
                 '(async()=>{' + script + '})().then(done,e=>done({error:String(e)}));', *args)
 
         def history():
-            return api('return (await chrome.storage.local.get("openscreenshot:captures"))["openscreenshot:captures"] || [];')
+            return api('return (await chrome.storage.local.get("pagegrab:captures"))["pagegrab:captures"] || [];')
 
         def new_editor(previous, via_progress=False):
             def find_page(path):
@@ -92,7 +92,7 @@ def main():
                 wait.until(lambda d: dialog not in d.window_handles)
 
         try:
-            driver.install_addon(str(ROOT / f'openscreenshot-firefox-v{VERSION}.zip'), temporary=True)
+            driver.install_addon(str(ROOT / f'pagegrab-firefox-v{VERSION}.zip'), temporary=True)
             driver.set_context('chrome')
             uuids = json.loads(driver.execute_script('return Services.prefs.getCharPref("extensions.webextensions.uuids")'))
             base = 'moz-extension://' + uuids[ADDON_ID]
@@ -114,9 +114,9 @@ def main():
                 let ui;
                 try { ui=ChromeUtils.importESModule("moz-src:///browser/components/customizableui/CustomizableUI.sys.mjs"); }
                 catch { ui=ChromeUtils.importESModule("resource:///modules/CustomizableUI.sys.mjs"); }
-                ui.CustomizableUI.addWidgetToArea("screenshot_personal_local-browser-action",ui.CustomizableUI.AREA_NAVBAR);
+                ui.CustomizableUI.addWidgetToArea("pagegrab_personal_local-browser-action",ui.CustomizableUI.AREA_NAVBAR);
             ''')
-            driver.find_element(By.ID, 'screenshot_personal_local-BAP').click()
+            driver.find_element(By.ID, 'pagegrab_personal_local-BAP').click()
             driver.set_context('content')
             new_editor(previous, via_progress=True)
             entry = history()[0]
@@ -150,14 +150,14 @@ def main():
                 api('''
                     const tabs=await chrome.tabs.query({});
                     const target=tabs.find(t=>t.url?.startsWith(arguments[0]));
-                    await chrome.storage.local.set({"openscreenshot:last-region":{x:20,y:20,width:200,height:100}});
+                    await chrome.storage.local.set({"pagegrab:last-region":{x:20,y:20,width:200,height:100}});
                     await chrome.tabs.update(target.id,{active:true});
                     await chrome.runtime.sendMessage({type:"CAPTURE_REQUEST",mode:arguments[1],repeat:arguments[1]==="region"});
                 ''', f'http://127.0.0.1:{server.server_port}', mode)
                 driver.switch_to.window(fixture_handle)
                 if mode == 'element':
                     wait.until(lambda d: d.find_elements(
-                        By.CSS_SELECTOR, '[data-openscreenshot-element-picker]'))
+                        By.CSS_SELECTOR, '[data-pagegrab-element-picker]'))
                     card = driver.find_element(By.ID, 'element-card')
                     expected = driver.execute_script('''
                         const rect=arguments[0].getBoundingClientRect(), dpr=devicePixelRatio;
@@ -169,7 +169,7 @@ def main():
                     # Hover the card background, outside its smaller colored child.
                     ActionChains(driver).move_to_element_with_offset(card, -100, -60).perform()
                     wait.until(lambda d: d.execute_script('''
-                        const root=document.querySelector('[data-openscreenshot-element-picker]')?.shadowRoot;
+                        const root=document.querySelector('[data-pagegrab-element-picker]')?.shadowRoot;
                         const selected=root?.querySelector('[data-selection]');
                         if (!selected || selected.hidden) return false;
                         const rect=selected.getBoundingClientRect();
@@ -185,7 +185,7 @@ def main():
                     assert entry['width'] == expected['width'] and entry['height'] == expected['height'], entry
                     # Decode the stored capture, rather than the editor's scaled canvas.
                     pixels = api('''
-                        const key="openscreenshot:capture-image:"+arguments[0];
+                        const key="pagegrab:capture-image:"+arguments[0];
                         const image=new Image();
                         image.src=(await chrome.storage.local.get(key))[key];
                         await image.decode();
@@ -212,8 +212,8 @@ def main():
             result = api('''
                 const tabs=await chrome.tabs.query({});
                 const target=tabs.find(t=>t.url?.startsWith(arguments[0]));
-                const stored=await chrome.storage.local.get("openscreenshot:settings");
-                await chrome.storage.local.set({"openscreenshot:settings":{...stored["openscreenshot:settings"],captureAction:"download"}});
+                const stored=await chrome.storage.local.get("pagegrab:settings");
+                await chrome.storage.local.set({"pagegrab:settings":{...stored["pagegrab:settings"],captureAction:"download"}});
                 await chrome.tabs.update(target.id,{active:true});
                 await chrome.runtime.sendMessage({type:"CAPTURE_REQUEST",mode:"visible"});
                 return true;

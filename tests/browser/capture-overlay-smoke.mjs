@@ -51,17 +51,17 @@ try {
   const visible = await page.screenshot();
   assert(!clean.equals(visible), 'overlay should visibly render');
   const host = await page.evaluateHandle(() =>
-    document.querySelector('[data-oss-capture-overlay]'),
+    document.querySelector('[data-pagegrab-capture-overlay]'),
   );
   assert(
-    await page.evaluate(() => !!document.querySelector('[data-oss-capture-overlay]')),
+    await page.evaluate(() => !!document.querySelector('[data-pagegrab-capture-overlay]')),
     'overlay should be mounted',
   );
   await page.evaluate(() => window.scrollModule.hideFixedElements());
   assert(
     await page.evaluate(
       () =>
-        getComputedStyle(document.querySelector('[data-oss-capture-overlay]')).visibility ===
+        getComputedStyle(document.querySelector('[data-pagegrab-capture-overlay]')).visibility ===
         'visible',
     ),
     'fixed-element hiding must preserve overlay',
@@ -75,7 +75,9 @@ try {
     window.injectOverlay('show', 50, 'Capturing screenshot…', 'Keep this tab open.'),
   );
   assert(
-    await page.evaluate(() => document.querySelectorAll('[data-oss-capture-overlay]').length === 1),
+    await page.evaluate(
+      () => document.querySelectorAll('[data-pagegrab-capture-overlay]').length === 1,
+    ),
     'updates must reuse a single host',
   );
   // Puppeteer accessibility snapshot traverses the closed shadow tree.
@@ -109,7 +111,7 @@ try {
   assert.equal(await spinnerAnimation(), 'none', 'reduced motion should stop decorative animation');
   await page.evaluate(() => window.injectOverlay('remove'));
   assert(
-    await page.evaluate(() => !document.querySelector('[data-oss-capture-overlay]')),
+    await page.evaluate(() => !document.querySelector('[data-pagegrab-capture-overlay]')),
     'cleanup must remove the host',
   );
   assert(clean.equals(await page.screenshot()), 'cleanup must restore clean pixels');

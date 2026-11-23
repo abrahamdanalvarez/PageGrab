@@ -65,7 +65,7 @@ try {
     globalName: '__ep',
   });
   const puppeteer = await loadPuppeteer();
-  work = await mkdtemp(join(tmpdir(), 'oss-element-smoke-'));
+  work = await mkdtemp(join(tmpdir(), 'pagegrab-element-smoke-'));
   browser = await puppeteer.launch({
     executablePath: CHROME,
     headless: true,
@@ -96,7 +96,7 @@ try {
       globalThis.picker(labels).then((value) => {
         globalThis.result = {
           value,
-          overlayAtResolution: !!document.querySelector('[data-openscreenshot-element-picker]'),
+          overlayAtResolution: !!document.querySelector('[data-pagegrab-element-picker]'),
         };
       });
     }, labels);
@@ -108,7 +108,7 @@ try {
   async function selectedRect() {
     return page.evaluate(() => {
       const box = document
-        .querySelector('[data-openscreenshot-element-picker]')
+        .querySelector('[data-pagegrab-element-picker]')
         ?.shadowRoot.querySelector('[data-selection]');
       if (!box || box.hidden) return null;
       const r = box.getBoundingClientRect();
@@ -117,7 +117,7 @@ try {
   }
   async function control(label) {
     return page.evaluate((label) => {
-      const root = document.querySelector('[data-openscreenshot-element-picker]').shadowRoot;
+      const root = document.querySelector('[data-pagegrab-element-picker]').shadowRoot;
       const button = [...root.querySelectorAll('button')].find(
         (button) => button.textContent === label,
       );
@@ -134,7 +134,7 @@ try {
     const point = await page.evaluate((label) => {
       const button = [
         ...document
-          .querySelector('[data-openscreenshot-element-picker]')
+          .querySelector('[data-pagegrab-element-picker]')
           .shadowRoot.querySelectorAll('button'),
       ].find((button) => button.textContent === label);
       const r = button.getBoundingClientRect();
@@ -380,9 +380,7 @@ try {
   await page.waitForFunction(() => globalThis.result !== undefined);
   assert.equal((await result()).value, null, 'second run cancels prior run');
   assert.equal(
-    await page.evaluate(
-      () => document.querySelectorAll('[data-openscreenshot-element-picker]').length,
-    ),
+    await page.evaluate(() => document.querySelectorAll('[data-pagegrab-element-picker]').length),
     1,
     'only one overlay survives duplicate runs',
   );

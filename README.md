@@ -1,7 +1,7 @@
-# Screenshot extension (personal fork)
+# PageGrab
 
-A personal fork of [OpenScreenShot](https://github.com/PGHQdev/OpenScreenShot) by PGHQdev,
-used under the MIT License. It's a Chrome and Firefox extension for full-page, region,
+PageGrab is a personal fork of [OpenScreenShot](https://github.com/PGHQdev/OpenScreenShot) by
+PGHQdev, used under the MIT License. It's a Chrome and Firefox extension for full-page, region,
 element and visible-area screenshots, with an annotation editor, PDF export and screen
 recording. This fork is not affiliated with or endorsed by the original project.
 

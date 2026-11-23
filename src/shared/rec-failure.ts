@@ -19,7 +19,7 @@
  * parks it here and the next popup open reads it out. Cleared on consumption,
  * so it says its piece once.
  */
-export const REC_FAILURE_KEY = 'openscreenshot:rec-failure';
+export const REC_FAILURE_KEY = 'pagegrab:rec-failure';
 
 /**
  * Broadcast to any surface that happens to be open when a failure lands, so a

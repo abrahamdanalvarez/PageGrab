@@ -3,10 +3,10 @@ import { DEFAULT_SETTINGS } from './types';
 import { DEFAULT_RECORDING_SETTINGS, type RecordingSettings } from './recording-types';
 import { makeThumbnail } from './thumbnail';
 
-const SETTINGS_KEY = 'openscreenshot:settings';
-const LAST_CAPTURE_KEY = 'openscreenshot:last-capture';
-const LAST_REGION_KEY = 'openscreenshot:last-region';
-const REC_SETTINGS_KEY = 'openscreenshot:rec-settings';
+const SETTINGS_KEY = 'pagegrab:settings';
+const LAST_CAPTURE_KEY = 'pagegrab:last-capture';
+const LAST_REGION_KEY = 'pagegrab:last-region';
+const REC_SETTINGS_KEY = 'pagegrab:rec-settings';
 
 /** Load recorder toggles, merged over the defaults so new fields are always present. */
 export async function getRecSettings(): Promise<RecordingSettings> {
@@ -34,8 +34,8 @@ export async function setSettings(patch: Partial<Settings>): Promise<Settings> {
   return next;
 }
 
-const EXPRESS_MIGRATED_KEY = 'openscreenshot:express-default-migrated';
-const EXPRESS_NOTE_KEY = 'openscreenshot:express-note-pending';
+const EXPRESS_MIGRATED_KEY = 'pagegrab:express-default-migrated';
+const EXPRESS_NOTE_KEY = 'pagegrab:express-note-pending';
 
 /**
  * One-shot flip of `expressMode` to the new default. Stored settings persist
@@ -83,8 +83,8 @@ export function onSettingsChanged(callback: () => void): void {
   });
 }
 
-const CAPTURES_KEY = 'openscreenshot:captures';
-const captureImageKey = (id: string) => `openscreenshot:capture-image:${id}`;
+const CAPTURES_KEY = 'pagegrab:captures';
+const captureImageKey = (id: string) => `pagegrab:capture-image:${id}`;
 
 /**
  * How many recent captures the shelf keeps. `unlimitedStorage` (already
@@ -225,7 +225,7 @@ async function readCaptureList(): Promise<CaptureHistoryEntry[]> {
 }
 
 /**
- * One-time upgrade from the pre-shelf single `openscreenshot:last-capture`
+ * One-time upgrade from the pre-shelf single `pagegrab:last-capture`
  * key to the bounded list. Unlocked itself — every caller runs it from
  * inside its own `withCaptureLock` turn, so the legacy-key check, the list
  * read and the writes below all happen atomically with respect to every
@@ -380,8 +380,8 @@ export async function getLastRegion(): Promise<PageRect | null> {
   return (stored[LAST_REGION_KEY] as PageRect | undefined) ?? null;
 }
 
-const DRAFT_KEY = 'openscreenshot:draft';
-const DRAFT_IMAGE_KEY = 'openscreenshot:draft-image';
+const DRAFT_KEY = 'pagegrab:draft';
+const DRAFT_IMAGE_KEY = 'pagegrab:draft-image';
 
 /**
  * The editor's in-progress edits. The value is `unknown` here on purpose:

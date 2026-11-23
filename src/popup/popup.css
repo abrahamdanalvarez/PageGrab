@@ -1,6 +1,6 @@
 /* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: design.md · designed-as-app */
 /*
- * OpenScreenShot popup styles. Design tokens (spacing, radius, shadows,
+ * PageGrab popup styles. Design tokens (spacing, radius, shadows,
  * typography, light/dark themes) live in src/shared/tokens.css and are shared
  * with the editor. This file only holds popup surface styles.
  */
@@ -216,10 +216,10 @@ body:has(.app:not(.app-settings-page)) {
   border-radius: var(--r-full);
   background: var(--accent);
   flex: 0 0 auto;
-  animation: oss-rec-pulse 1.2s ease-in-out infinite;
+  animation: pagegrab-rec-pulse 1.2s ease-in-out infinite;
 }
 
-@keyframes oss-rec-pulse {
+@keyframes pagegrab-rec-pulse {
   50% {
     opacity: 0.25;
   }
@@ -239,10 +239,10 @@ body:has(.app:not(.app-settings-page)) {
   border-top-color: transparent;
   border-radius: var(--r-full);
   flex: 0 0 auto;
-  animation: oss-spin 0.7s linear infinite;
+  animation: pagegrab-spin 0.7s linear infinite;
 }
 
-@keyframes oss-spin {
+@keyframes pagegrab-spin {
   to {
     transform: rotate(360deg);
   }
@@ -699,7 +699,7 @@ label.settings-row .settings-label {
   font-size: var(--fs-sm);
   font-weight: 500;
   border: 1px solid transparent;
-  animation: oss-toast-in var(--dur-slow) var(--ease-out);
+  animation: pagegrab-toast-in var(--dur-slow) var(--ease-out);
 }
 
 .toast-text {
@@ -750,7 +750,7 @@ label.settings-row .settings-label {
   border-color: var(--border);
 }
 
-@keyframes oss-toast-in {
+@keyframes pagegrab-toast-in {
   from {
     opacity: 0;
     transform: translateY(-6px);

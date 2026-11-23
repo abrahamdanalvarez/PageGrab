@@ -421,7 +421,7 @@ export async function exportVideo(
 
     for (let i = 0; i < videos.length && !signal.aborted; i++) {
       if (!isPlayable(videos[i], timings[i])) {
-        console.warn(`[OpenScreenShot] segment ${i} has no playable video; skipping it`);
+        console.warn(`[PageGrab] segment ${i} has no playable video; skipping it`);
         skippedParts += 1;
         continue;
       }
@@ -443,13 +443,13 @@ export async function exportVideo(
           .play()
           .then(() => true)
           .catch((err: unknown) => {
-            console.warn(`[OpenScreenShot] segment ${i} failed to play; skipping it`, err);
+            console.warn(`[PageGrab] segment ${i} failed to play; skipping it`, err);
             return false;
           }),
         webcam
           ? webcam.play().catch((err: unknown) => {
               console.error(
-                `[OpenScreenShot] segment ${i} mic/webcam failed to play; exporting without it`,
+                `[PageGrab] segment ${i} mic/webcam failed to play; exporting without it`,
                 err,
               );
               skippedParts += 1;

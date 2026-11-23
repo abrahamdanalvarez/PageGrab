@@ -48,15 +48,15 @@ import {
 import { theme as designTheme } from '../shared/design-tokens';
 import { isProtectedUrl } from '../shared/utils';
 
-const REC_STATE_KEY = 'openscreenshot:rec-state';
+const REC_STATE_KEY = 'pagegrab:rec-state';
 /**
  * A finished session whose recorder tab failed to open. `handleQuery` offers
  * it through the same Recover link a crashed session uses, which is what
  * makes 'recorder-open-failed' a message the user can act on.
  */
-const UNOPENED_SESSION_KEY = 'openscreenshot:unopened-session';
+const UNOPENED_SESSION_KEY = 'pagegrab:unopened-session';
 /** Written by the recorder's Continue button; read by the popup and here. */
-const CONTINUE_SESSION_KEY = 'openscreenshot:continue-session';
+const CONTINUE_SESSION_KEY = 'pagegrab:continue-session';
 const RECORDER_URL = chrome.runtime.getURL('src/recorder/index.html');
 const CONTROL_URL = chrome.runtime.getURL('src/control/index.html');
 const START_TIMEOUT_MS = 10_000;
@@ -659,7 +659,7 @@ async function handleStart(
     await chrome.tabs.update(tabId, { active: true }).catch(() => {});
     await chrome.windows.update(tab.windowId, { focused: true }).catch(() => {});
   } catch (err) {
-    console.error('[OpenScreenShot] recording start failed', err);
+    console.error('[PageGrab] recording start failed', err);
     if (mounted) await unmountOverlay(tabId);
     // The session row was already written when this threw (a navigating tab
     // fails `execInTab`, for one), and a row left at status 'recording' with
@@ -826,7 +826,7 @@ async function retainFailedSession(
     }
     return true;
   } catch (err) {
-    console.error('[OpenScreenShot] retaining the failed session failed', err);
+    console.error('[PageGrab] retaining the failed session failed', err);
     return false;
   }
 }
@@ -870,7 +870,7 @@ async function discardRun(
       await deleteSession(sessionId);
     }
   } catch (err) {
-    console.error('[OpenScreenShot] discarding the abandoned start failed', err);
+    console.error('[PageGrab] discarding the abandoned start failed', err);
   }
 }
 
@@ -1029,7 +1029,7 @@ async function handleQuery(sendResponse: (state: RecState) => void): Promise<voi
       camDenied: !!state.camDenied,
     });
   } catch (err) {
-    console.error('[OpenScreenShot] REC_QUERY failed', err);
+    console.error('[PageGrab] REC_QUERY failed', err);
     // The reply below is a guess, not an answer: a live recording would be
     // reported as idle. Whoever asked has to know the state is untrustworthy.
     void reportFailure('query-failed');
@@ -1160,7 +1160,7 @@ async function handleEngineWriteFailed(
 }
 
 async function handleEngineError(sessionId: string, message: string): Promise<void> {
-  console.error('[OpenScreenShot] recording engine error', message);
+  console.error('[PageGrab] recording engine error', message);
   resolveStartPending();
   const state = await getRecState();
   // Only the live session's own error may tear anything down. A late error

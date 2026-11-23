@@ -18,9 +18,9 @@ export type ElementSelection = { kind: 'element'; rect: PageRect } | { kind: 'fu
 export function selectElement(labels: ElementPickerLabels): Promise<ElementSelection | null> {
   return new Promise((resolve) => {
     const doc = document;
-    const marker = 'data-openscreenshot-element-picker';
+    const marker = 'data-pagegrab-element-picker';
     // A DOM event also works across separately serialized invocations.
-    doc.querySelector(`[${marker}]`)?.dispatchEvent(new Event('openscreenshot-cancel'));
+    doc.querySelector(`[${marker}]`)?.dispatchEvent(new Event('pagegrab-cancel'));
     let active = doc.activeElement;
     while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
     const priorFocus = active instanceof HTMLElement ? active : null;
@@ -299,7 +299,7 @@ export function selectElement(labels: ElementPickerLabels): Promise<ElementSelec
         window.removeEventListener(name, onInteraction, true);
       }
       window.removeEventListener('pagehide', onPageHide);
-      host.removeEventListener('openscreenshot-cancel', onCancel);
+      host.removeEventListener('pagegrab-cancel', onCancel);
       host.remove();
       if (priorFocus?.isConnected) priorFocus.focus({ preventScroll: true });
       // The caller may immediately captureVisibleTab: wait until our pixels are gone.
@@ -470,7 +470,7 @@ export function selectElement(labels: ElementPickerLabels): Promise<ElementSelec
     };
     const onCancel = () => finish(null);
     const onPageHide = () => finish(null);
-    host.addEventListener('openscreenshot-cancel', onCancel);
+    host.addEventListener('pagegrab-cancel', onCancel);
     doc.documentElement.append(host);
     // Popover top layer keeps the picker above page dialogs and transformed roots.
     if (typeof host.showPopover === 'function') {

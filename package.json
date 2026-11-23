@@ -1,5 +1,5 @@
 {
-  "name": "openscreenshot",
+  "name": "pagegrab",
   "version": "2.5.2",
   "description": "Open-source screenshot tool for Chrome and Firefox — full-page, region, and visible-area capture with annotation and PDF export.",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "build": "pnpm run tokens && tsc --noEmit && vite build",
-    "package": "pnpm run build && rm -f openscreenshot-v$npm_package_version.zip && cd dist && zip -r -X ../openscreenshot-v$npm_package_version.zip .",
+    "package": "pnpm run build && rm -f pagegrab-v$npm_package_version.zip && cd dist && zip -r -X ../pagegrab-v$npm_package_version.zip .",
     "smoke:a11y": "node tests/browser/a11y-smoke.mjs",
     "smoke:editor": "node tests/browser/editor-keyboard-smoke.mjs",
     "smoke:media": "node tests/browser/media-a11y-smoke.mjs",
@@ -33,7 +33,7 @@
     "smoke:capture": "node tests/browser/capture-overlay-smoke.mjs",
     "build:firefox": "pnpm run tokens && tsc --noEmit && vite build --mode firefox",
     "dev:firefox": "vite --mode firefox",
-    "package:firefox": "pnpm run build:firefox && web-ext build --source-dir dist-firefox --artifacts-dir . --filename openscreenshot-firefox-v{version}.zip --overwrite-dest",
+    "package:firefox": "pnpm run build:firefox && web-ext build --source-dir dist-firefox --artifacts-dir . --filename pagegrab-firefox-v{version}.zip --overwrite-dest",
     "lint:firefox": "web-ext lint --source-dir dist-firefox"
   },
   "dependencies": {

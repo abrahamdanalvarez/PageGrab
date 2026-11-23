@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "전체 페이지 스크린샷 & 화면 녹화 - OpenScreenShot",
+    "message": "전체 페이지 스크린샷 & 화면 녹화 - PageGrab",
     "description": "Extension name shown in Chrome UI."
   },
   "extNameFirefox": {
-    "message": "전체 페이지 스크린샷 - OpenScreenShot",
+    "message": "전체 페이지 스크린샷 - PageGrab",
     "description": "Extension name in the Firefox build, which takes screenshots only and has no recorder."
   },
   "extDesc": {
@@ -792,11 +792,11 @@
     "description": "Setup page: one-line assurance under the trust pills."
   },
   "setupPinTitle": {
-    "message": "OpenScreenShot 고정",
+    "message": "PageGrab 고정",
     "description": "Popup: nudge to pin the extension, shown while it is not on the toolbar."
   },
   "setupPinSub": {
-    "message": "위의 🧩를 클릭한 다음, OpenScreenShot 옆의 📌를 클릭하세요.",
+    "message": "위의 🧩를 클릭한 다음, PageGrab 옆의 📌를 클릭하세요.",
     "description": "Popup: how to pin — the puzzle menu sits directly above the popup."
   },
   "setupFromRecord": {
@@ -1770,7 +1770,7 @@
     "description": "Editor: heading shown over the empty-state overlay."
   },
   "editorCaptureHint": {
-    "message": "OpenScreenShot으로 페이지를 캡처하면 여기에 열려요.",
+    "message": "PageGrab으로 페이지를 캡처하면 여기에 열려요.",
     "description": "Editor: empty-state body text."
   },
   "editorDropHint": {
@@ -1782,7 +1782,7 @@
     "description": "Editor: empty-state button that opens the popup."
   },
   "editorOpenExtensionIcon": {
-    "message": "툴바에서 OpenScreenShot 아이콘을 클릭하세요.",
+    "message": "툴바에서 PageGrab 아이콘을 클릭하세요.",
     "description": "Editor: empty-state fallback text shown when openPopup() fails."
   },
   "editorReplaceImage": {
@@ -2134,7 +2134,7 @@
     }
   },
   "editorPinWindowTitle": {
-    "message": "고정된 캡처 (편집하는 대로 업데이트) — OpenScreenShot",
+    "message": "고정된 캡처 (편집하는 대로 업데이트) — PageGrab",
     "description": "Editor: the pinned floating window’s document title."
   },
   "editorPinnedCaptureAlt": {
@@ -2408,7 +2408,7 @@
     "description": "Editor topbar: tooltip on the Rate star."
   },
   "ratePromptHeadline": {
-    "message": "OpenScreenShot이 도움이 되었나요?",
+    "message": "PageGrab이 도움이 되었나요?",
     "description": "One-time post-export rate prompt: headline."
   },
   "ratePromptBody": {
@@ -2619,7 +2619,7 @@
     "description": "Toolbar popup shown on browser-restricted pages."
   },
   "restrictedInstructions": {
-    "message": "샘플 페이지를 연 다음 새 탭에서 OpenScreenShot 아이콘을 클릭하세요.",
+    "message": "샘플 페이지를 연 다음 새 탭에서 PageGrab 아이콘을 클릭하세요.",
     "description": "Toolbar popup shown on browser-restricted pages."
   },
   "restrictedSample": {
@@ -2640,7 +2640,7 @@
   },
   "supportBody": {
     "description": "Optional project support and rating message.",
-    "message": "OpenScreenShot은 완전한 오픈 소스입니다. 유용하게 사용하고 있다면 기부로 개발을 지원하고, 짧은 평가로 다른 사람들에게 알릴 수 있어요."
+    "message": "PageGrab은 완전한 오픈 소스입니다. 유용하게 사용하고 있다면 기부로 개발을 지원하고, 짧은 평가로 다른 사람들에게 알릴 수 있어요."
   },
   "capturePasteHint": {
     "message": "⌘V / Ctrl+V로 원하는 곳에 붙여넣으세요.",
@@ -2658,7 +2658,7 @@
     "message": "Help diagnose this capture error"
   },
   "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve OpenScreenShot."
+    "message": "Review the details, then send an anonymous error report to help improve PageGrab."
   },
   "captureReportDetails": {
     "message": "Technical details (optional)"
@@ -2726,11 +2726,11 @@
     "description": "Recording control tab: camera preview placeholder while the camera opens."
   },
   "ctlCameraBlocked": {
-    "message": "OpenScreenShot의 카메라가 차단되어 있어요. 카메라 없이 녹화가 계속돼요.",
+    "message": "PageGrab의 카메라가 차단되어 있어요. 카메라 없이 녹화가 계속돼요.",
     "description": "Recording control tab: camera preview placeholder when the camera is blocked or missing."
   },
   "ctlMicBlocked": {
-    "message": "OpenScreenShot의 마이크가 차단되어 있어요. 마이크 없이 녹화가 계속돼요.",
+    "message": "PageGrab의 마이크가 차단되어 있어요. 마이크 없이 녹화가 계속돼요.",
     "description": "Recording control tab: note when the microphone is blocked or missing."
   },
   "ctlFixPermissions": {
@@ -2780,7 +2780,7 @@
     "description": "Recording control tab: button that switches to the tab being recorded."
   },
   "ctlNoTarget": {
-    "message": "녹화할 탭에서 툴바의 OpenScreenShot 아이콘으로 이 페이지를 여세요.",
+    "message": "녹화할 탭에서 툴바의 PageGrab 아이콘으로 이 페이지를 여세요.",
     "description": "Recording control tab: shown when the page was opened without a tab to record."
   }
 }

@@ -158,20 +158,20 @@ describe('FILENAME_TOKENS', () => {
 
 describe('menuIdToMode', () => {
   it('maps each capture menu item to its mode', () => {
-    expect(menuIdToMode('oss-full-page')).toBe('full-page');
-    expect(menuIdToMode('oss-visible')).toBe('visible');
-    expect(menuIdToMode('oss-region')).toBe('region');
-    expect(menuIdToMode('oss-element')).toBe('element');
+    expect(menuIdToMode('pagegrab-full-page')).toBe('full-page');
+    expect(menuIdToMode('pagegrab-visible')).toBe('visible');
+    expect(menuIdToMode('pagegrab-region')).toBe('region');
+    expect(menuIdToMode('pagegrab-element')).toBe('element');
   });
 
   it('returns null for unknown ids (parent item, other extensions)', () => {
-    expect(menuIdToMode('oss-parent')).toBe(null);
+    expect(menuIdToMode('pagegrab-parent')).toBe(null);
     expect(menuIdToMode('')).toBe(null);
   });
 
   it('leaves the repeat item out of the plain mode mapping', () => {
     // Repeat is region + a stored rect; the click handler routes it separately.
-    expect(MENU_REPEAT_ID).toBe('oss-region-repeat');
+    expect(MENU_REPEAT_ID).toBe('pagegrab-region-repeat');
     expect(menuIdToMode(MENU_REPEAT_ID)).toBe(null);
   });
 });

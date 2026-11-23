@@ -17,8 +17,8 @@ const ROOT = resolve(fileURLToPath(new URL('../..', import.meta.url)));
 const DIST = join(ROOT, 'dist');
 const SETUP_PAGE = '/src/setup/index.html';
 const POPUP_PAGE = '/src/popup/index.html';
-const PENDING_RECORD_KEY = 'openscreenshot:pending-record';
-const REC_FAILURE_KEY = 'openscreenshot:rec-failure';
+const PENDING_RECORD_KEY = 'pagegrab:pending-record';
+const REC_FAILURE_KEY = 'pagegrab:rec-failure';
 const CHROME =
   process.env.CHROME_BIN ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
@@ -42,7 +42,7 @@ function assert(condition, message) {
  * the recovery route exists for.
  */
 function installChromeStub(messages, opts) {
-  const PENDING_KEY = 'openscreenshot:pending-record';
+  const PENDING_KEY = 'pagegrab:pending-record';
 
   function getMessage(key, subs) {
     const entry = messages[key];
@@ -255,7 +255,7 @@ async function main() {
 
   const messages = JSON.parse(await readFile(join(DIST, '_locales/en/messages.json'), 'utf8'));
   const puppeteer = await loadPuppeteer(ROOT);
-  const work = await mkdtemp(join(tmpdir(), 'oss-setup-smoke-'));
+  const work = await mkdtemp(join(tmpdir(), 'pagegrab-setup-smoke-'));
   const server = await serveDist(DIST);
   const base = `http://127.0.0.1:${server.address().port}`;
   step(`serving dist/ on ${base}`);

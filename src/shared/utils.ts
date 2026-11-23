@@ -113,14 +113,14 @@ export function normalizeCaptureAction(value: unknown): CaptureAction {
 
 /** Context menu item id for each capture mode. */
 export const MENU_IDS: Record<CaptureMode, string> = {
-  'full-page': 'oss-full-page',
-  visible: 'oss-visible',
-  region: 'oss-region',
-  element: 'oss-element',
+  'full-page': 'pagegrab-full-page',
+  visible: 'pagegrab-visible',
+  region: 'pagegrab-region',
+  element: 'pagegrab-element',
 };
 
 /** Menu item id for "repeat last region" — region mode with the stored rect. */
-export const MENU_REPEAT_ID = 'oss-region-repeat';
+export const MENU_REPEAT_ID = 'pagegrab-region-repeat';
 
 /** Capture mode for a context menu item id, or null for any other id. */
 export function menuIdToMode(id: string): CaptureMode | null {

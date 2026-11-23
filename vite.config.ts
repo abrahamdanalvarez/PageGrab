@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
       background: { scripts: ['src/background/index.ts'], type: 'module' },
       browser_specific_settings: {
         gecko: {
-          id: 'screenshot@personal.local',
+          id: 'pagegrab@personal.local',
           strict_min_version: '140.0',
           data_collection_permissions: { required: ['none'] },
         },

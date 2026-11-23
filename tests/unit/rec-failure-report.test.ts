@@ -26,7 +26,7 @@ import { theme as designTheme } from '../../src/shared/design-tokens';
  * `handleStart` takes on its way to (or away from) the engine.
  */
 
-const REC_STATE_KEY = 'openscreenshot:rec-state';
+const REC_STATE_KEY = 'pagegrab:rec-state';
 
 type Listener = (message: unknown, sender: unknown, respond: (r: unknown) => void) => unknown;
 
@@ -789,7 +789,7 @@ describe('a finished recording whose page will not open', () => {
 
   it('stops offering it once a later recording opens its own page', async () => {
     const done = await createSession(DEFAULT_RECORDING_SETTINGS);
-    session.set('openscreenshot:unopened-session', 'earlier-1');
+    session.set('pagegrab:unopened-session', 'earlier-1');
     session.set(REC_STATE_KEY, liveState(done.id));
     await loadWorker();
     void send({ type: 'ENGINE_STOPPED', sessionId: done.id, canceled: false });
@@ -798,16 +798,16 @@ describe('a finished recording whose page will not open', () => {
     expect(fakeChrome.tabs.create).toHaveBeenCalled();
     // The offer is a shortcut to a recording the user has not seen, and they
     // are looking at one now.
-    expect(session.get('openscreenshot:unopened-session')).toBeUndefined();
+    expect(session.get('pagegrab:unopened-session')).toBeUndefined();
   });
 
   it('stops offering a session the user has since deleted', async () => {
-    session.set('openscreenshot:unopened-session', 'gone-1');
+    session.set('pagegrab:unopened-session', 'gone-1');
     await loadWorker();
     const state = (await send({ type: 'REC_QUERY' })) as { recoverableSessionId?: string };
     await settle();
     expect(state.recoverableSessionId).toBeUndefined();
-    expect(session.get('openscreenshot:unopened-session')).toBeUndefined();
+    expect(session.get('pagegrab:unopened-session')).toBeUndefined();
   });
 });
 
@@ -1587,7 +1587,7 @@ describe('the control tab', () => {
       index: 1,
       openerTabId: 3,
     });
-    expect(session.get('openscreenshot:control-target')).toMatchObject({
+    expect(session.get('pagegrab:control-target')).toMatchObject({
       tabId: 3,
       shot: 'data:image/jpeg;base64,AA==',
       continueSessionId: 'cont-1',
@@ -1601,7 +1601,7 @@ describe('the control tab', () => {
     void send({ type: 'REC_OPEN_CONTROL', tabId: 3 });
     await settle();
     expect(fakeChrome.tabs.create).toHaveBeenCalled();
-    expect(session.get('openscreenshot:control-target')).toMatchObject({ shot: null });
+    expect(session.get('pagegrab:control-target')).toMatchObject({ shot: null });
   });
 
   it('reports start-blocked for a page that cannot be recorded', async () => {

@@ -174,7 +174,7 @@ describe('isRecFailure', () => {
 
 describe('REC_FAILURE_KEY', () => {
   it('is namespaced like the other session keys', () => {
-    expect(REC_FAILURE_KEY.startsWith('openscreenshot:')).toBe(true);
+    expect(REC_FAILURE_KEY.startsWith('pagegrab:')).toBe(true);
   });
 
   it('is the key the popup reads and the worker writes', () => {

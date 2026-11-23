@@ -155,7 +155,7 @@ async function main() {
   );
 
   const puppeteer = await loadPuppeteer();
-  const work = await mkdtemp(join(tmpdir(), 'oss-region-smoke-'));
+  const work = await mkdtemp(join(tmpdir(), 'pagegrab-region-smoke-'));
 
   let browser = null;
   try {

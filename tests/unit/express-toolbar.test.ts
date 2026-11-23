@@ -9,7 +9,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
  * suite, nothing here needs reads held open).
  */
 
-const SETTINGS_KEY = 'openscreenshot:settings';
+const SETTINGS_KEY = 'pagegrab:settings';
 
 let store: Map<string, unknown>;
 
@@ -33,7 +33,7 @@ function makeFakeChrome() {
       setBadgeTextColor: vi.fn(() => Promise.resolve()),
       setBadgeText: vi.fn(() => Promise.resolve()),
       setTitle: vi.fn(() => Promise.resolve()),
-      getTitle: vi.fn(() => Promise.resolve('OpenScreenShot')),
+      getTitle: vi.fn(() => Promise.resolve('PageGrab')),
       openPopup: vi.fn(() => Promise.resolve()),
     },
     contextMenus: {
@@ -241,14 +241,14 @@ describe('context-menu surfaces', () => {
 
   it('the icon-menu mode items start a capture', async () => {
     await importBackground();
-    menuClick('oss-icon-visible');
+    menuClick('pagegrab-icon-visible');
     await flushMicrotasks();
     expect(fakeChrome.tabs.query).toHaveBeenCalledWith({ active: true, currentWindow: true });
   });
 
   it('the settings items open the browser options page', async () => {
     await importBackground();
-    for (const id of ['oss-settings', 'oss-icon-settings']) {
+    for (const id of ['pagegrab-settings', 'pagegrab-icon-settings']) {
       fakeChrome.runtime.openOptionsPage.mockClear();
       menuClick(id);
       await flushMicrotasks();
@@ -258,7 +258,7 @@ describe('context-menu surfaces', () => {
 
   it('the express checkbox persists its new state', async () => {
     await importBackground();
-    menuClick('oss-express', false);
+    menuClick('pagegrab-express', false);
     await flushMicrotasks();
     expect((store.get(SETTINGS_KEY) as { expressMode?: boolean }).expressMode).toBe(false);
   });

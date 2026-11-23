@@ -1,5 +1,5 @@
 /**
- * Shared types for OpenScreenShot — message protocol, capture modes, and settings.
+ * Shared types for PageGrab — message protocol, capture modes, and settings.
  * Imported by the popup, background service worker, and (later) the editor.
  */
 

@@ -122,7 +122,7 @@ export type RecMessage =
   | { type: 'REC_QUERY' };
 
 /** Session key for the tab the control page is about to record. */
-export const CONTROL_TARGET_KEY = 'openscreenshot:control-target';
+export const CONTROL_TARGET_KEY = 'pagegrab:control-target';
 
 /** What the control page shows about its target before the recording starts. */
 export interface ControlTarget {

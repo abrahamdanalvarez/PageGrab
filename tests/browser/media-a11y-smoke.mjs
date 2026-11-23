@@ -176,7 +176,7 @@ async function seedRecorderSession() {
     }, 3300);
   });
   const db = await new Promise((done, fail) => {
-    const req = indexedDB.open('openscreenshot-recordings', 1);
+    const req = indexedDB.open('pagegrab-recordings', 1);
     req.onsuccess = () => done(req.result);
     req.onerror = () => fail(req.error);
   });
@@ -361,7 +361,7 @@ function closeRGB(a, b, tol = 30) {
 async function testEditor(browser, base, messages) {
   step('EDITOR — opening with a seeded capture, Rectangle tool selected');
   const { page, cdp, crashes } = await newPage(browser, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page.setViewport({ width: 1280, height: 860 });
   await page.goto(`${base}/src/editor/index.html`, { waitUntil: 'networkidle0' });
@@ -1529,7 +1529,7 @@ async function main() {
 
   const messages = JSON.parse(await readFile(join(DIST, '_locales/en/messages.json'), 'utf8'));
   const puppeteer = await loadPuppeteer(ROOT);
-  const work = await mkdtemp(join(tmpdir(), 'oss-media-a11y-smoke-'));
+  const work = await mkdtemp(join(tmpdir(), 'pagegrab-media-a11y-smoke-'));
   const server = await serveDist(DIST);
   const base = `http://127.0.0.1:${server.address().port}`;
   step(`serving dist/ on ${base}`);

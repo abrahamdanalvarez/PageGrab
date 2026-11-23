@@ -1,5 +1,5 @@
 /* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: design.md · designed-as-app */
-/* OpenScreenShot editor styles. Tokens come from src/shared/tokens.css. */
+/* PageGrab editor styles. Tokens come from src/shared/tokens.css. */
 
 @import '../shared/tokens.css';
 @import '../shared/controls.css';
@@ -18,7 +18,7 @@
  * opacity/transform via a plain `transition`, declared alongside each
  * surface's own rule.
  */
-@keyframes oss-fade-in {
+@keyframes pagegrab-fade-in {
   from {
     opacity: 0;
   }
@@ -26,7 +26,7 @@
     opacity: 1;
   }
 }
-@keyframes oss-pop-in {
+@keyframes pagegrab-pop-in {
   from {
     opacity: 0;
     transform: translateY(-4px) scale(0.98);
@@ -36,7 +36,7 @@
     transform: translateY(0) scale(1);
   }
 }
-@keyframes oss-notice-in {
+@keyframes pagegrab-notice-in {
   from {
     opacity: 0;
     transform: translate(-50%, -6px);
@@ -46,7 +46,7 @@
     transform: translate(-50%, 0);
   }
 }
-@keyframes oss-modal-in {
+@keyframes pagegrab-modal-in {
   from {
     opacity: 0;
     transform: scale(0.96);
@@ -327,7 +327,7 @@ body {
   border-radius: var(--r-md);
   background: var(--surface-1);
   box-shadow: var(--sh-md);
-  animation: oss-pop-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-pop-in var(--dur-mid) var(--ease-out);
   transition:
     opacity var(--dur-mid) var(--ease-out),
     transform var(--dur-mid) var(--ease-out);
@@ -633,7 +633,7 @@ body {
   border-radius: var(--r-md);
   background: var(--surface-1);
   box-shadow: var(--sh-md);
-  animation: oss-pop-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-pop-in var(--dur-mid) var(--ease-out);
   transition:
     opacity var(--dur-mid) var(--ease-out),
     transform var(--dur-mid) var(--ease-out);
@@ -737,7 +737,7 @@ body {
   box-shadow: var(--sh-md);
   font-size: var(--fs-base);
   z-index: 5;
-  animation: oss-notice-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-notice-in var(--dur-mid) var(--ease-out);
   transition:
     opacity var(--dur-mid) var(--ease-out),
     transform var(--dur-mid) var(--ease-out);
@@ -766,7 +766,7 @@ body {
   box-shadow: var(--sh-md);
   font-size: var(--fs-base);
   z-index: 8;
-  animation: oss-notice-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-notice-in var(--dur-mid) var(--ease-out);
   transition:
     opacity var(--dur-mid) var(--ease-out),
     transform var(--dur-mid) var(--ease-out);
@@ -793,7 +793,7 @@ body {
   white-space: pre;
   outline: none;
   z-index: 6;
-  animation: oss-fade-in var(--dur-fast) var(--ease-out);
+  animation: pagegrab-fade-in var(--dur-fast) var(--ease-out);
 }
 
 /* ---- Export modal ---- */
@@ -805,7 +805,7 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 100;
-  animation: oss-fade-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-fade-in var(--dur-mid) var(--ease-out);
   transition: opacity var(--dur-mid) var(--ease-out);
 }
 /* Applied by transition.ts's useExitDelay — see .zoom-popover.is-closing. */
@@ -827,7 +827,7 @@ body {
   border-radius: var(--r-lg);
   box-shadow: var(--sh-lg);
   padding: var(--s-5);
-  animation: oss-modal-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-modal-in var(--dur-mid) var(--ease-out);
   transition:
     opacity var(--dur-mid) var(--ease-out),
     transform var(--dur-mid) var(--ease-out);
@@ -1029,7 +1029,7 @@ body {
   font-size: var(--fs-sm);
   color: var(--danger);
   line-height: 1.45;
-  animation: oss-fade-in var(--dur-fast) var(--ease-out);
+  animation: pagegrab-fade-in var(--dur-fast) var(--ease-out);
 }
 
 /* Real per-page progress for the multi-page PDF path (a native <progress>,
@@ -1043,7 +1043,7 @@ body {
   margin: 0 0 var(--s-3);
   font-size: var(--fs-sm);
   color: var(--text-2);
-  animation: oss-fade-in var(--dur-fast) var(--ease-out);
+  animation: pagegrab-fade-in var(--dur-fast) var(--ease-out);
 }
 /*
  * ::-webkit-progress-bar/-value are inert in the shipped Chromium this
@@ -1228,7 +1228,7 @@ body {
      floor (see tokens.css); --text-1 clears it in both themes. */
   color: var(--text-1);
   background: var(--stage-bg);
-  animation: oss-fade-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-fade-in var(--dur-mid) var(--ease-out);
 }
 
 .empty {
@@ -1333,10 +1333,10 @@ body {
   border: 2px solid var(--accent);
   border-top-color: transparent;
   border-radius: var(--r-full);
-  animation: oss-spin 0.7s linear infinite;
+  animation: pagegrab-spin 0.7s linear infinite;
 }
 
-@keyframes oss-spin {
+@keyframes pagegrab-spin {
   to {
     transform: rotate(360deg);
   }
@@ -1468,7 +1468,7 @@ body {
   border-radius: var(--r-md);
   background: var(--surface-1);
   box-shadow: var(--sh-md);
-  animation: oss-pop-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-pop-in var(--dur-mid) var(--ease-out);
   transition:
     opacity var(--dur-mid) var(--ease-out),
     transform var(--dur-mid) var(--ease-out);
@@ -1576,7 +1576,7 @@ body {
   box-shadow: var(--sh-md);
   font-size: var(--fs-base);
   z-index: 7;
-  animation: oss-notice-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-notice-in var(--dur-mid) var(--ease-out);
   transition:
     opacity var(--dur-mid) var(--ease-out),
     transform var(--dur-mid) var(--ease-out);
@@ -1615,7 +1615,7 @@ body {
   background: var(--surface-1);
   box-shadow: var(--sh-md);
   z-index: 7;
-  animation: oss-notice-in var(--dur-mid) var(--ease-out);
+  animation: pagegrab-notice-in var(--dur-mid) var(--ease-out);
 }
 
 .rate-prompt-headline {

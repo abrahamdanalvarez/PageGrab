@@ -243,9 +243,9 @@ describe('capture-store concurrency (R-28a Important #1)', () => {
     expect(list.map((e) => e.title).sort()).toEqual(['first', 'second']);
     // Every image key actually stored is referenced by exactly one row, and
     // every row's image key actually exists — neither direction is broken.
-    const referenced = new Set(list.map((e) => `openscreenshot:capture-image:${e.id}`));
+    const referenced = new Set(list.map((e) => `pagegrab:capture-image:${e.id}`));
     const storedImageKeys = new Set(
-      [...storeRef.keys()].filter((k) => k.startsWith('openscreenshot:capture-image:')),
+      [...storeRef.keys()].filter((k) => k.startsWith('pagegrab:capture-image:')),
     );
     expect(storedImageKeys).toEqual(referenced);
   });
@@ -279,7 +279,7 @@ describe('legacy capture migration', () => {
   it('turns the old single-capture key into the newest shelf entry', async () => {
     const storage = await import('../../src/shared/storage');
     await chrome.storage.local.set({
-      'openscreenshot:last-capture': capture({ title: 'legacy shot', capturedAt: 500 }),
+      'pagegrab:last-capture': capture({ title: 'legacy shot', capturedAt: 500 }),
     });
     const list = await storage.listCaptureHistory();
     expect(list).toHaveLength(1);
@@ -292,10 +292,10 @@ describe('legacy capture migration', () => {
   it('removes the legacy key only after the new list and image are written', async () => {
     const storage = await import('../../src/shared/storage');
     await chrome.storage.local.set({
-      'openscreenshot:last-capture': capture({ title: 'legacy shot' }),
+      'pagegrab:last-capture': capture({ title: 'legacy shot' }),
     });
     await storage.listCaptureHistory();
-    expect(await chrome.storage.local.get('openscreenshot:last-capture')).toEqual({});
+    expect(await chrome.storage.local.get('pagegrab:last-capture')).toEqual({});
     // What it wrote first is still fully there.
     const list = await storage.listCaptureHistory();
     expect(list).toHaveLength(1);
@@ -304,7 +304,7 @@ describe('legacy capture migration', () => {
   it('is idempotent: a second read does not duplicate the migrated entry', async () => {
     const storage = await import('../../src/shared/storage');
     await chrome.storage.local.set({
-      'openscreenshot:last-capture': capture({ title: 'legacy shot' }),
+      'pagegrab:last-capture': capture({ title: 'legacy shot' }),
     });
     await storage.listCaptureHistory();
     await storage.listCaptureHistory();
@@ -318,7 +318,7 @@ describe('legacy capture migration', () => {
     const storage = await import('../../src/shared/storage');
     await storage.setLastCapture(capture({ title: 'already in the shelf' }));
     await chrome.storage.local.set({
-      'openscreenshot:last-capture': capture({ title: 'legacy shot', capturedAt: 2000 }),
+      'pagegrab:last-capture': capture({ title: 'legacy shot', capturedAt: 2000 }),
     });
     const list = await storage.listCaptureHistory();
     expect(list.map((e) => e.title)).toEqual(['legacy shot', 'already in the shelf']);
@@ -335,7 +335,7 @@ describe('legacy capture migration', () => {
     // legacy migration must not each mint their own copy.
     const storage = await import('../../src/shared/storage');
     await chrome.storage.local.set({
-      'openscreenshot:last-capture': capture({ title: 'legacy shot' }),
+      'pagegrab:last-capture': capture({ title: 'legacy shot' }),
     });
     const [listA, listB] = await Promise.all([
       storage.listCaptureHistory(),
@@ -366,13 +366,13 @@ describe('a thumbnail encode failure never fails the read/write it happened insi
     vi.mocked(makeThumbnail).mockRejectedValueOnce(new Error('decode failed'));
     const storage = await import('../../src/shared/storage');
     await chrome.storage.local.set({
-      'openscreenshot:last-capture': capture({ title: 'legacy corrupt' }),
+      'pagegrab:last-capture': capture({ title: 'legacy corrupt' }),
     });
     const list = await storage.listCaptureHistory();
     expect(list).toHaveLength(1);
     expect(list[0].title).toBe('legacy corrupt');
     expect(list[0].thumbnail).toMatch(/^data:image\/png;base64,/);
-    expect(await chrome.storage.local.get('openscreenshot:last-capture')).toEqual({});
+    expect(await chrome.storage.local.get('pagegrab:last-capture')).toEqual({});
   });
 });
 

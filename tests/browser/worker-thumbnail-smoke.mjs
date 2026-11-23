@@ -226,7 +226,7 @@ async function main() {
 
   const chrome = await resolveChrome();
   const puppeteer = await loadPuppeteer(ROOT);
-  const work = await mkdtemp(join(tmpdir(), 'oss-worker-smoke-'));
+  const work = await mkdtemp(join(tmpdir(), 'pagegrab-worker-smoke-'));
   let browser = null;
   try {
     step(`launching the built extension for real, packed, on Chrome for Testing (${chrome})`);

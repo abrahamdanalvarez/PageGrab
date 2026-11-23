@@ -377,7 +377,7 @@ export function App() {
           <span class="brand-mark" aria-hidden="true">
             <BrandMark size={22} />
           </span>
-          <span class="brand-name">OpenScreenShot</span>
+          <span class="brand-name">PageGrab</span>
           {ed.capture ? <span class="brand-mode">{labelForSource(ed.capture.mode)}</span> : null}
         </div>
         {
@@ -1383,11 +1383,11 @@ function ExportDialog({
 
         {showQuality ? (
           <div class="modal-row">
-            <label class="field-label" for="oss-quality">
+            <label class="field-label" for="pagegrab-quality">
               {t('editorQuality', [String(Math.round(quality * 100))])}
             </label>
             <input
-              id="oss-quality"
+              id="pagegrab-quality"
               class="range"
               type="range"
               min="0.1"
@@ -1507,12 +1507,12 @@ function ExportDialog({
         ) : null}
 
         <div class="modal-row">
-          <label class="field-label" for="oss-filename">
+          <label class="field-label" for="pagegrab-filename">
             {t('editorFilename')}
           </label>
           <div class="filename-row">
             <input
-              id="oss-filename"
+              id="pagegrab-filename"
               class="filename-input"
               type="text"
               value={filenameBase}

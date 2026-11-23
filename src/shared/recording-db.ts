@@ -15,7 +15,7 @@ import {
   type SegmentViewport,
 } from './recording-types';
 
-const DB_NAME = 'openscreenshot-recordings';
+const DB_NAME = 'pagegrab-recordings';
 const DB_VERSION = 1;
 
 interface ChunkRecord {

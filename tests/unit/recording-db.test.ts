@@ -238,7 +238,7 @@ describe('findRecoverableSessions', () => {
 
 describe('open() connection caching', () => {
   it('clears the cached connection on failure so a later call can retry', async () => {
-    const DB_NAME = 'openscreenshot-recordings'; // must match src/shared/recording-db.ts
+    const DB_NAME = 'pagegrab-recordings'; // must match src/shared/recording-db.ts
 
     // Force a real IndexedDB failure: open the database at a higher version
     // directly, so the module's own indexedDB.open(DB_NAME, 1) call fails

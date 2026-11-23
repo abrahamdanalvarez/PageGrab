@@ -215,7 +215,7 @@ function installChromeStub(messages) {
 /** Whether `sessionId` still has a row in the app's own IndexedDB store. */
 async function sessionExists(sessionId) {
   const db = await new Promise((done, fail) => {
-    const req = indexedDB.open('openscreenshot-recordings', 1);
+    const req = indexedDB.open('pagegrab-recordings', 1);
     req.onsuccess = () => done(req.result);
     req.onerror = () => fail(req.error);
   });
@@ -232,7 +232,7 @@ async function sessionExists(sessionId) {
 /** The undo stack as the session record on disk holds it, or null. */
 async function savedHistory(sessionId) {
   const db = await new Promise((done, fail) => {
-    const req = indexedDB.open('openscreenshot-recordings', 1);
+    const req = indexedDB.open('pagegrab-recordings', 1);
     req.onsuccess = () => done(req.result);
     req.onerror = () => fail(req.error);
   });
@@ -288,7 +288,7 @@ async function seedSession() {
   });
 
   const db = await new Promise((done, fail) => {
-    const req = indexedDB.open('openscreenshot-recordings', 1);
+    const req = indexedDB.open('pagegrab-recordings', 1);
     req.onsuccess = () => done(req.result);
     req.onerror = () => fail(req.error);
   });
@@ -383,7 +383,7 @@ async function seedWebcamBubbleSession() {
   ]);
 
   const db = await new Promise((done, fail) => {
-    const req = indexedDB.open('openscreenshot-recordings', 1);
+    const req = indexedDB.open('pagegrab-recordings', 1);
     req.onsuccess = () => done(req.result);
     req.onerror = () => fail(req.error);
   });
@@ -427,7 +427,7 @@ async function seedWebcamBubbleSession() {
  */
 async function seedEmptySegment(sessionId) {
   const db = await new Promise((done, fail) => {
-    const req = indexedDB.open('openscreenshot-recordings', 1);
+    const req = indexedDB.open('pagegrab-recordings', 1);
     req.onsuccess = () => done(req.result);
     req.onerror = () => fail(req.error);
   });
@@ -465,7 +465,7 @@ async function seedEmptySegment(sessionId) {
  */
 async function seedEmptySession() {
   const db = await new Promise((done, fail) => {
-    const req = indexedDB.open('openscreenshot-recordings', 1);
+    const req = indexedDB.open('pagegrab-recordings', 1);
     req.onsuccess = () => done(req.result);
     req.onerror = () => fail(req.error);
   });
@@ -513,7 +513,7 @@ async function seedEmptySession() {
  */
 async function seedManyChunksSession() {
   const db = await new Promise((done, fail) => {
-    const req = indexedDB.open('openscreenshot-recordings', 1);
+    const req = indexedDB.open('pagegrab-recordings', 1);
     req.onsuccess = () => done(req.result);
     req.onerror = () => fail(req.error);
   });
@@ -689,7 +689,7 @@ async function main() {
 
   const messages = JSON.parse(await readFile(join(DIST, '_locales/en/messages.json'), 'utf8'));
   const puppeteer = await loadPuppeteer(ROOT);
-  const work = await mkdtemp(join(tmpdir(), 'oss-recorder-smoke-'));
+  const work = await mkdtemp(join(tmpdir(), 'pagegrab-recorder-smoke-'));
   const downloads = join(work, 'downloads');
   const server = await serveDist(DIST);
   const base = `http://127.0.0.1:${server.address().port}`;
@@ -1571,7 +1571,7 @@ async function main() {
     await page.evaluateOnNewDocument(() => {
       if (!location.search.includes('seedfail=1')) return;
       void chrome.storage.session.set({
-        'openscreenshot:rec-failure': { code: 'chunk-write-failed', at: Date.now() },
+        'pagegrab:rec-failure': { code: 'chunk-write-failed', at: Date.now() },
       });
     });
     await page.goto(`${base}${PAGE}?session=${seeded.sessionId}&seedfail=1`, {

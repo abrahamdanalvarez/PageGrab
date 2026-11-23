@@ -74,9 +74,7 @@ function render(state: CaptureProgress | null): void {
   percent.textContent = state.percent === null ? '' : `${state.percent}%`;
   if (state.percent === null) progress.removeAttribute('value');
   else progress.value = state.percent;
-  document.title = state.result
-    ? 'OpenScreenShot'
-    : `${percent.textContent || label} · OpenScreenShot`;
+  document.title = state.result ? 'PageGrab' : `${percent.textContent || label} · PageGrab`;
 }
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === 'CAPTURE_DIALOG_CONTEXT' || message?.type === 'CAPTURE_DIALOG_OPEN') {

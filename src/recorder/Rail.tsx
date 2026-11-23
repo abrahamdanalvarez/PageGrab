@@ -267,7 +267,7 @@ export function Rail(props: RailProps) {
         props.onDeleted();
       }
     } catch (err) {
-      console.error('[OpenScreenShot] export failed', err);
+      console.error('[PageGrab] export failed', err);
       props.onToast(t(recFailureMessageKey('export-failed')), 'error');
     } finally {
       abortRef.current = null;

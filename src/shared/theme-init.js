@@ -23,7 +23,7 @@
 // surface loads and writes the mirror.
 (function () {
   try {
-    var pref = localStorage.getItem('openscreenshot:theme-mirror') || 'system';
+    var pref = localStorage.getItem('pagegrab:theme-mirror') || 'system';
     var prefersDark =
       window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     var dark = pref === 'dark' || (pref === 'system' && prefersDark);

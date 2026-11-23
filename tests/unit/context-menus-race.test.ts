@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
  * `createContextMenus()` runs from `chrome.runtime.onInstalled`, which can
  * fire twice in quick succession (e.g. an extension reload while a prior
  * install/update event is still being handled). The user-reported symptom
- * was "duplicate id oss-express" specifically, but a fully-simultaneous
+ * was "duplicate id pagegrab-express" specifically, but a fully-simultaneous
  * double-fire collides on every menu id this function creates, not just
  * that one — so this test pins the defect that exists (every id created
  * exactly once) rather than only the narrower symptom that was reported.
@@ -17,18 +17,18 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 /** Every id `createContextMenus()` creates, in no particular order. */
 const ALL_MENU_IDS = [
-  'oss-parent',
-  'oss-full-page',
-  'oss-visible',
-  'oss-region',
-  'oss-element',
-  'oss-icon-full-page',
-  'oss-icon-visible',
-  'oss-icon-region',
-  'oss-icon-element',
-  'oss-settings',
-  'oss-icon-settings',
-  'oss-express',
+  'pagegrab-parent',
+  'pagegrab-full-page',
+  'pagegrab-visible',
+  'pagegrab-region',
+  'pagegrab-element',
+  'pagegrab-icon-full-page',
+  'pagegrab-icon-visible',
+  'pagegrab-icon-region',
+  'pagegrab-icon-element',
+  'pagegrab-settings',
+  'pagegrab-icon-settings',
+  'pagegrab-express',
 ];
 
 /** Ids actually handed to `chrome.contextMenus.create` across both runs. */
@@ -61,7 +61,7 @@ function makeFakeChrome() {
       setBadgeTextColor: vi.fn(() => Promise.resolve()),
       setBadgeText: vi.fn(() => Promise.resolve()),
       setTitle: vi.fn(() => Promise.resolve()),
-      getTitle: vi.fn(() => Promise.resolve('OpenScreenShot')),
+      getTitle: vi.fn(() => Promise.resolve('PageGrab')),
       openPopup: vi.fn(() => Promise.resolve()),
     },
     contextMenus: {

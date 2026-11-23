@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "Full Page Screenshot & Screen Recorder - OpenScreenShot",
+    "message": "Full Page Screenshot & Screen Recorder - PageGrab",
     "description": "Extension name in the Chrome Web Store and the browser. Firefox uses extNameFirefox, because its build has no recorder."
   },
   "extNameFirefox": {
-    "message": "Full Page Screenshot - OpenScreenShot",
+    "message": "Full Page Screenshot - PageGrab",
     "description": "Extension name in the Firefox build, which takes screenshots only and has no recorder."
   },
   "extDesc": {
@@ -792,11 +792,11 @@
     "description": "Setup page: one-line assurance under the trust pills."
   },
   "setupPinTitle": {
-    "message": "Pin OpenScreenShot",
+    "message": "Pin PageGrab",
     "description": "Popup: nudge to pin the extension, shown while it is not on the toolbar."
   },
   "setupPinSub": {
-    "message": "Click the 🧩 up there, then the 📌 next to OpenScreenShot.",
+    "message": "Click the 🧩 up there, then the 📌 next to PageGrab.",
     "description": "Popup: how to pin — the puzzle menu sits directly above the popup."
   },
   "setupFromRecord": {
@@ -1770,7 +1770,7 @@
     "description": "Editor: heading shown over the empty-state overlay."
   },
   "editorCaptureHint": {
-    "message": "Capture a page with OpenScreenShot, and it opens here.",
+    "message": "Capture a page with PageGrab, and it opens here.",
     "description": "Editor: empty-state body text."
   },
   "editorDropHint": {
@@ -1782,7 +1782,7 @@
     "description": "Editor: empty-state button that opens the popup."
   },
   "editorOpenExtensionIcon": {
-    "message": "Click the OpenScreenShot icon in the toolbar.",
+    "message": "Click the PageGrab icon in the toolbar.",
     "description": "Editor: empty-state fallback text shown when openPopup() fails."
   },
   "editorReplaceImage": {
@@ -2134,7 +2134,7 @@
     }
   },
   "editorPinWindowTitle": {
-    "message": "Pinned capture (updates as you edit) — OpenScreenShot",
+    "message": "Pinned capture (updates as you edit) — PageGrab",
     "description": "Editor: the pinned floating window’s document title."
   },
   "editorPinnedCaptureAlt": {
@@ -2408,7 +2408,7 @@
     "description": "Editor topbar: tooltip on the Rate star."
   },
   "ratePromptHeadline": {
-    "message": "Did OpenScreenShot help?",
+    "message": "Did PageGrab help?",
     "description": "One-time post-export rate prompt: headline."
   },
   "ratePromptBody": {
@@ -2619,7 +2619,7 @@
     "description": "Toolbar popup shown on browser-restricted pages."
   },
   "restrictedInstructions": {
-    "message": "Open the sample page, then click the OpenScreenShot icon in that new tab.",
+    "message": "Open the sample page, then click the PageGrab icon in that new tab.",
     "description": "Toolbar popup shown on browser-restricted pages."
   },
   "restrictedSample": {
@@ -2640,7 +2640,7 @@
   },
   "supportBody": {
     "description": "Optional project support and rating message.",
-    "message": "OpenScreenShot is completely open source. If it’s useful to you, a donation helps support its development—and a quick rating helps others find it."
+    "message": "PageGrab is completely open source. If it’s useful to you, a donation helps support its development—and a quick rating helps others find it."
   },
   "capturePasteHint": {
     "message": "Paste it anywhere with ⌘V / Ctrl+V.",
@@ -2659,7 +2659,7 @@
     "description": "Popup error report heading."
   },
   "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve OpenScreenShot.",
+    "message": "Review the details, then send an anonymous error report to help improve PageGrab.",
     "description": "Popup error report explanation."
   },
   "captureReportDetails": {
@@ -2733,11 +2733,11 @@
     "description": "Recording control tab: camera preview placeholder while the camera opens."
   },
   "ctlCameraBlocked": {
-    "message": "The camera is blocked for OpenScreenShot. The recording continues without it.",
+    "message": "The camera is blocked for PageGrab. The recording continues without it.",
     "description": "Recording control tab: camera preview placeholder when the camera is blocked or missing."
   },
   "ctlMicBlocked": {
-    "message": "The microphone is blocked for OpenScreenShot. The recording continues without it.",
+    "message": "The microphone is blocked for PageGrab. The recording continues without it.",
     "description": "Recording control tab: note when the microphone is blocked or missing."
   },
   "ctlFixPermissions": {
@@ -2787,7 +2787,7 @@
     "description": "Recording control tab: button that switches to the tab being recorded."
   },
   "ctlNoTarget": {
-    "message": "Open this page with the OpenScreenShot toolbar icon, on the tab you want to record.",
+    "message": "Open this page with the PageGrab toolbar icon, on the tab you want to record.",
     "description": "Recording control tab: shown when the page was opened without a tab to record."
   }
 }

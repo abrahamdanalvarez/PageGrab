@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "フルページ スクリーンショット & 画面録画 - OpenScreenShot",
+    "message": "フルページ スクリーンショット & 画面録画 - PageGrab",
     "description": "Extension name shown in Chrome UI."
   },
   "extNameFirefox": {
-    "message": "フルページ スクリーンショット - OpenScreenShot",
+    "message": "フルページ スクリーンショット - PageGrab",
     "description": "Extension name in the Firefox build, which takes screenshots only and has no recorder."
   },
   "extDesc": {
@@ -792,11 +792,11 @@
     "description": "Setup page: one-line assurance under the trust pills."
   },
   "setupPinTitle": {
-    "message": "OpenScreenShot を固定",
+    "message": "PageGrab を固定",
     "description": "Popup: nudge to pin the extension, shown while it is not on the toolbar."
   },
   "setupPinSub": {
-    "message": "上の 🧩 をクリックし、OpenScreenShot の横の 📌 をクリックします。",
+    "message": "上の 🧩 をクリックし、PageGrab の横の 📌 をクリックします。",
     "description": "Popup: how to pin — the puzzle menu sits directly above the popup."
   },
   "setupFromRecord": {
@@ -1770,7 +1770,7 @@
     "description": "Editor: heading shown over the empty-state overlay."
   },
   "editorCaptureHint": {
-    "message": "OpenScreenShot でページをキャプチャすると、ここに開きます。",
+    "message": "PageGrab でページをキャプチャすると、ここに開きます。",
     "description": "Editor: empty-state body text."
   },
   "editorDropHint": {
@@ -1782,7 +1782,7 @@
     "description": "Editor: empty-state button that opens the popup."
   },
   "editorOpenExtensionIcon": {
-    "message": "ツールバーの OpenScreenShot アイコンをクリックしてください。",
+    "message": "ツールバーの PageGrab アイコンをクリックしてください。",
     "description": "Editor: empty-state fallback text shown when openPopup() fails."
   },
   "editorReplaceImage": {
@@ -2134,7 +2134,7 @@
     }
   },
   "editorPinWindowTitle": {
-    "message": "固定したキャプチャ (編集に合わせて更新) - OpenScreenShot",
+    "message": "固定したキャプチャ (編集に合わせて更新) - PageGrab",
     "description": "Editor: the pinned floating window’s document title."
   },
   "editorPinnedCaptureAlt": {
@@ -2408,7 +2408,7 @@
     "description": "Editor topbar: tooltip on the Rate star."
   },
   "ratePromptHeadline": {
-    "message": "OpenScreenShotは役に立ちましたか？",
+    "message": "PageGrabは役に立ちましたか？",
     "description": "One-time post-export rate prompt: headline."
   },
   "ratePromptBody": {
@@ -2619,7 +2619,7 @@
     "description": "Toolbar popup shown on browser-restricted pages."
   },
   "restrictedInstructions": {
-    "message": "サンプルページを開き、その新しいタブでOpenScreenShotのアイコンをクリックしてください。",
+    "message": "サンプルページを開き、その新しいタブでPageGrabのアイコンをクリックしてください。",
     "description": "Toolbar popup shown on browser-restricted pages."
   },
   "restrictedSample": {
@@ -2640,7 +2640,7 @@
   },
   "supportBody": {
     "description": "Optional project support and rating message.",
-    "message": "OpenScreenShotは完全にオープンソースです。役に立ったら、寄付で開発を支援できます。評価を投稿すると、より多くの人に知ってもらえます。"
+    "message": "PageGrabは完全にオープンソースです。役に立ったら、寄付で開発を支援できます。評価を投稿すると、より多くの人に知ってもらえます。"
   },
   "capturePasteHint": {
     "message": "⌘V / Ctrl+V で好きな場所に貼り付けられます。",
@@ -2658,7 +2658,7 @@
     "message": "Help diagnose this capture error"
   },
   "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve OpenScreenShot."
+    "message": "Review the details, then send an anonymous error report to help improve PageGrab."
   },
   "captureReportDetails": {
     "message": "Technical details (optional)"
@@ -2726,11 +2726,11 @@
     "description": "Recording control tab: camera preview placeholder while the camera opens."
   },
   "ctlCameraBlocked": {
-    "message": "OpenScreenShot のカメラはブロックされています。カメラなしで録画を続けます。",
+    "message": "PageGrab のカメラはブロックされています。カメラなしで録画を続けます。",
     "description": "Recording control tab: camera preview placeholder when the camera is blocked or missing."
   },
   "ctlMicBlocked": {
-    "message": "OpenScreenShot のマイクはブロックされています。マイクなしで録画を続けます。",
+    "message": "PageGrab のマイクはブロックされています。マイクなしで録画を続けます。",
     "description": "Recording control tab: note when the microphone is blocked or missing."
   },
   "ctlFixPermissions": {
@@ -2780,7 +2780,7 @@
     "description": "Recording control tab: button that switches to the tab being recorded."
   },
   "ctlNoTarget": {
-    "message": "録画するタブで、ツールバーの OpenScreenShot アイコンからこのページを開いてください。",
+    "message": "録画するタブで、ツールバーの PageGrab アイコンからこのページを開いてください。",
     "description": "Recording control tab: shown when the page was opened without a tab to record."
   }
 }

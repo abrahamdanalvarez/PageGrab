@@ -27,12 +27,12 @@ export function getWindowViewport() {
  *
  * When an inner element scrolls further than the document (common in SPAs and
  * dashboards like Gmail, Claude, Notion — the body is pinned, or only a footer
- * overflows it), find that element, tag it `data-oss-scroller`, and report ITS
+ * overflows it), find that element, tag it `data-pagegrab-scroller`, and report ITS
  * geometry + viewport rect so the capture loop scrolls it and crops each tile to it.
  *
  * Smaller scroll boxes inside the captured region (code blocks, tables, panel
  * widgets) are expanded to their full content height and tagged
- * `data-oss-expanded`, so the capture holds them whole. {@link restoreCapture}
+ * `data-pagegrab-expanded`, so the capture holds them whole. {@link restoreCapture}
  * puts them back.
  */
 export function getMetrics(excludeScrollbars = false): Metrics {
@@ -178,7 +178,7 @@ export function prepareCapture(): void {
   };
   if (win.__ossCaptureState) return;
   const root = document.documentElement;
-  const scroller = document.querySelector<HTMLElement>('[data-oss-scroller="1"]');
+  const scroller = document.querySelector<HTMLElement>('[data-pagegrab-scroller="1"]');
   const scrollRoot = (document.scrollingElement as HTMLElement | null) ?? root;
   const elements = [...new Set([root, scrollRoot, ...(scroller ? [scroller] : [])])];
   // Chromium's standard scrollbar-color takes precedence over WebKit rules.
@@ -229,19 +229,19 @@ export function prepareCapture(): void {
 
 /**
  * Hide fixed/sticky elements so they don't duplicate across tiles. Hidden
- * elements are tagged with a `data-oss-hidden` attribute so
+ * elements are tagged with a `data-pagegrab-hidden` attribute so
  * {@link restoreCapture} can find them again.
  */
 export function hideFixedElements(): void {
-  const scroller = document.querySelector('[data-oss-scroller="1"]');
+  const scroller = document.querySelector('[data-pagegrab-scroller="1"]');
   const els = document.querySelectorAll('*');
   for (const el of els) {
-    if (el.hasAttribute('data-oss-capture-overlay')) continue;
+    if (el.hasAttribute('data-pagegrab-capture-overlay')) continue;
     // A fixed app shell holds the scroller; hiding it would blank every later tile.
     if (scroller && el.contains(scroller)) continue;
     const cs = getComputedStyle(el);
     if (cs.position === 'fixed' || cs.position === 'sticky') {
-      if (el.hasAttribute('data-oss-hidden')) continue;
+      if (el.hasAttribute('data-pagegrab-hidden')) continue;
       (el as HTMLElement).dataset.ossVisibility = (el as HTMLElement).style.getPropertyValue(
         'visibility',
       );
@@ -259,7 +259,7 @@ export function hideFixedElements(): void {
  * bottom). Scrolls the tagged inner container if present, else the window.
  */
 export function scrollToPosition(y: number): { scrollY: number; atBottom: boolean } {
-  const scroller = document.querySelector<HTMLElement>('[data-oss-scroller="1"]');
+  const scroller = document.querySelector<HTMLElement>('[data-pagegrab-scroller="1"]');
   if (scroller) {
     scroller.scrollTop = y;
     const after = scroller.scrollTop;
@@ -275,14 +275,14 @@ export function scrollToPosition(y: number): { scrollY: number; atBottom: boolea
 /** Restore the page to its pre-capture state. */
 export function restoreCapture(): void {
   // Shrink expanded boxes first, so the scroll positions below land where they were.
-  for (const el of document.querySelectorAll<HTMLElement>('[data-oss-expanded]')) {
+  for (const el of document.querySelectorAll<HTMLElement>('[data-pagegrab-expanded]')) {
     if (el.dataset.ossStyle === undefined) el.removeAttribute('style');
     else el.setAttribute('style', el.dataset.ossStyle);
     el.scrollTop = Number(el.dataset.ossExpanded);
     delete el.dataset.ossExpanded;
     delete el.dataset.ossStyle;
   }
-  const hidden = document.querySelectorAll('[data-oss-hidden="1"]');
+  const hidden = document.querySelectorAll('[data-pagegrab-hidden="1"]');
   for (const el of hidden) {
     const node = el as HTMLElement;
     if (node.dataset.ossVisibility)
@@ -322,7 +322,7 @@ export function restoreCapture(): void {
     state.style.remove();
     delete win.__ossCaptureState;
   }
-  const scroller = document.querySelector<HTMLElement>('[data-oss-scroller="1"]');
+  const scroller = document.querySelector<HTMLElement>('[data-pagegrab-scroller="1"]');
   if (scroller) delete scroller.dataset.ossScroller;
 }
 

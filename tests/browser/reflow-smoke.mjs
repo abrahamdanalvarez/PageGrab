@@ -6,7 +6,7 @@
 // keyboard focus trap while scrolled, and no surface that is meant to reflow
 // grows a horizontal scrollbar.
 // Run with: npm run build && npm run smoke:reflow
-// Set OSS_LOCALE=de (any folder under dist/_locales) to lay the surfaces out
+// Set PAGEGRAB_LOCALE=de (any folder under dist/_locales) to lay the surfaces out
 // in that catalog instead of English; translated strings run longer.
 import { readFileSync } from 'node:fs';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
@@ -19,7 +19,7 @@ import { assertDistFresh, loadPuppeteer, serveDist } from './dist-server.mjs';
 
 const ROOT = resolve(fileURLToPath(new URL('../..', import.meta.url)));
 const DIST = join(ROOT, 'dist');
-const LOCALE = process.env.OSS_LOCALE || 'en';
+const LOCALE = process.env.PAGEGRAB_LOCALE || 'en';
 const CHROME =
   process.env.CHROME_BIN ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
@@ -156,7 +156,7 @@ async function seedRecorderSession() {
   });
 
   const db = await new Promise((done, fail) => {
-    const req = indexedDB.open('openscreenshot-recordings', 1);
+    const req = indexedDB.open('pagegrab-recordings', 1);
     req.onsuccess = () => done(req.result);
     req.onerror = () => fail(req.error);
   });
@@ -225,7 +225,7 @@ async function testLongCapture(browser, base, messages) {
     .png()
     .toBuffer();
   const { page, crashes } = await newPage(browser, messages, {
-    'openscreenshot:last-capture': {
+    'pagegrab:last-capture': {
       dataUrl: `data:image/png;base64,${png.toString('base64')}`,
       width: 1440,
       height: 5800,
@@ -358,7 +358,7 @@ async function testLongCapture(browser, base, messages) {
 async function testEditor(browser, base, messages) {
   step('EDITOR — opening with a seeded capture');
   const { page, crashes } = await newPage(browser, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page.setViewport({ width: 1280, height: 860 });
   await page.goto(`${base}/src/editor/index.html`, { waitUntil: 'networkidle0' });
@@ -817,7 +817,7 @@ async function main() {
     await readFile(join(DIST, '_locales', LOCALE, 'messages.json'), 'utf8'),
   );
   const puppeteer = await loadPuppeteer(ROOT);
-  const work = await mkdtemp(join(tmpdir(), 'oss-reflow-smoke-'));
+  const work = await mkdtemp(join(tmpdir(), 'pagegrab-reflow-smoke-'));
   const server = await serveDist(DIST);
   const base = `http://127.0.0.1:${server.address().port}`;
   step(`serving dist/ on ${base} (locale ${LOCALE})`);

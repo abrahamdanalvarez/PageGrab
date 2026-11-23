@@ -325,7 +325,7 @@ async function testExportButtonWidthFloor(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -407,7 +407,7 @@ async function testPdfRealProgress(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeTallCapture(),
+    'pagegrab:last-capture': await makeTallCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -579,8 +579,8 @@ async function testDraftRestoreFailureNoOverlap(browser, base, messages) {
   page.on('pageerror', (err) => crashes.push(String(err)));
   const capture = await makeCapture();
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': capture,
-    'openscreenshot:draft': {
+    'pagegrab:last-capture': capture,
+    'pagegrab:draft': {
       sourceCapturedAt: capture.capturedAt,
       annotations: [{ id: 'a1', type: 'rect', x: 10, y: 10, w: 50, h: 50 }],
       frame: {},
@@ -589,7 +589,7 @@ async function testDraftRestoreFailureNoOverlap(browser, base, messages) {
     // Syntactically a data: URL, not real image bytes — getDraftImage()
     // resolves it fine, so restoreDraft's img.onerror -> refuse() path is
     // what actually fires (the failure branch that sets the stage notice).
-    'openscreenshot:draft-image': 'data:image/png;base64,bm90LWEtcG5n',
+    'pagegrab:draft-image': 'data:image/png;base64,bm90LWEtcG5n',
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.draft-restore', { timeout: 5000 });
@@ -649,8 +649,8 @@ async function testStageNoticeDraftPromptPriority(browser, base, messages) {
   page.on('pageerror', (err) => crashes.push(String(err)));
   const capture = await makeCapture();
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': capture,
-    'openscreenshot:draft': {
+    'pagegrab:last-capture': capture,
+    'pagegrab:draft': {
       sourceCapturedAt: capture.capturedAt,
       annotations: [{ id: 'a1', type: 'rect', x: 10, y: 10, w: 50, h: 50 }],
       frame: {},
@@ -723,7 +723,7 @@ async function testStageErrorRetryAndDismiss(browser, base, messages) {
   const { page } = await newSmokePage(browser);
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': makeBadCapture(),
+    'pagegrab:last-capture': makeBadCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForFunction(
@@ -777,7 +777,7 @@ async function testStageErrorRetryAndDismiss(browser, base, messages) {
   // just hid the message.
   const goodCapture = await makeCapture();
   await page.evaluate((cap) => {
-    globalThis.chrome.storage.local.set({ 'openscreenshot:last-capture': cap });
+    globalThis.chrome.storage.local.set({ 'pagegrab:last-capture': cap });
   }, goodCapture);
   await page.click('.overlay-msg .btn-primary'); // Retry
   // imageSize (and so the canvas's aria-label) is set from the capture's own
@@ -799,7 +799,7 @@ async function testStageErrorRetryAndDismiss(browser, base, messages) {
   const { page: page2 } = await newSmokePage(browser);
   page2.on('pageerror', (err) => crashes.push(String(err)));
   await page2.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': makeBadCapture(),
+    'pagegrab:last-capture': makeBadCapture(),
   });
   await page2.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page2.waitForFunction(
@@ -827,7 +827,7 @@ async function testStageErrorRetryAndDismiss(browser, base, messages) {
   const { page: page3 } = await newSmokePage(browser);
   page3.on('pageerror', (err) => crashes.push(String(err)));
   await page3.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page3.evaluateOnNewDocument(() => {
     globalThis.__smoke.failNextStorageGet = true;
@@ -875,7 +875,7 @@ async function testPopoverTabDuringExit(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -983,7 +983,7 @@ async function testModalFastReopen(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -1066,7 +1066,7 @@ async function testPdfExportInBackgroundTab(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeTallCapture(),
+    'pagegrab:last-capture': await makeTallCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -1166,8 +1166,8 @@ async function testProgressBarColorScheme(browser, base, messages) {
     ],
   });
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
-    'openscreenshot:settings': { theme: 'dark' },
+    'pagegrab:last-capture': await makeCapture(),
+    'pagegrab:settings': { theme: 'dark' },
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -1199,8 +1199,8 @@ async function testProgressBarColorScheme(browser, base, messages) {
     ],
   });
   await page2.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
-    'openscreenshot:settings': { theme: 'light' },
+    'pagegrab:last-capture': await makeCapture(),
+    'pagegrab:settings': { theme: 'light' },
   });
   await page2.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page2.waitForSelector('.stage-canvas');
@@ -1244,7 +1244,7 @@ async function testMultiSelection(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -2145,8 +2145,8 @@ async function testCutTool(browser, base, messages) {
   // near-black in the dark theme — which is exactly the bucket the seam
   // marker's own hairline is counted in.
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': capture,
-    'openscreenshot:settings': { theme: 'light' },
+    'pagegrab:last-capture': capture,
+    'pagegrab:settings': { theme: 'light' },
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -2262,8 +2262,8 @@ async function testCutTool(browser, base, messages) {
   step('task 25: the cut is in the saved draft, so it survives a crash');
   await settle(1000); // past DRAFT_DEBOUNCE_MS
   const saved = await page.evaluate(async () => {
-    const got = await chrome.storage.local.get('openscreenshot:draft');
-    return got['openscreenshot:draft'] ?? null;
+    const got = await chrome.storage.local.get('pagegrab:draft');
+    return got['pagegrab:draft'] ?? null;
   });
   assert(
     JSON.stringify(saved?.bands) === JSON.stringify([{ y: 200, h: 200 }]),
@@ -2642,8 +2642,8 @@ async function testCutSelectionRules(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeStripedCapture(),
-    'openscreenshot:settings': { theme: 'light' },
+    'pagegrab:last-capture': await makeStripedCapture(),
+    'pagegrab:settings': { theme: 'light' },
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -2833,8 +2833,8 @@ async function testCutGroupFrame(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeStripedCapture(),
-    'openscreenshot:settings': { theme: 'light' },
+    'pagegrab:last-capture': await makeStripedCapture(),
+    'pagegrab:settings': { theme: 'light' },
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -3014,8 +3014,8 @@ async function testCutMixedSelectionGrab(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeStripedCapture(),
-    'openscreenshot:settings': { theme: 'light' },
+    'pagegrab:last-capture': await makeStripedCapture(),
+    'pagegrab:settings': { theme: 'light' },
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -3162,8 +3162,8 @@ async function testCutInPdfExport(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeTallCapture(),
-    'openscreenshot:settings': { theme: 'light' },
+    'pagegrab:last-capture': await makeTallCapture(),
+    'pagegrab:settings': { theme: 'light' },
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -3265,8 +3265,8 @@ async function testCutDraftRestore(browser, base, messages) {
     const crashes = [];
     page.on('pageerror', (err) => crashes.push(String(err)));
     await page.evaluateOnNewDocument(installChromeStub, messages, {
-      'openscreenshot:last-capture': capture,
-      'openscreenshot:draft': draft,
+      'pagegrab:last-capture': capture,
+      'pagegrab:draft': draft,
     });
     await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
     await page.waitForSelector('.draft-restore', { timeout: 5000 });
@@ -3329,8 +3329,8 @@ async function testBeautifyLooks(browser, base, messages) {
   // near-black in the dark theme.
   const capture = await makeCapture();
   const seed = {
-    'openscreenshot:last-capture': capture,
-    'openscreenshot:settings': { theme: 'light' },
+    'pagegrab:last-capture': capture,
+    'pagegrab:settings': { theme: 'light' },
   };
   const { page } = await newSmokePage(browser);
   const crashes = [];
@@ -3508,10 +3508,8 @@ async function testBeautifyLooks(browser, base, messages) {
   await setSlider('Spacing', 33);
   await new Promise((r) => setTimeout(r, 1200)); // past DRAFT_DEBOUNCE_MS
   const stored = await page.evaluate(async () => ({
-    draft: (await chrome.storage.local.get('openscreenshot:draft'))['openscreenshot:draft'] ?? null,
-    settings:
-      (await chrome.storage.local.get('openscreenshot:settings'))['openscreenshot:settings'] ??
-      null,
+    draft: (await chrome.storage.local.get('pagegrab:draft'))['pagegrab:draft'] ?? null,
+    settings: (await chrome.storage.local.get('pagegrab:settings'))['pagegrab:settings'] ?? null,
   }));
   assert(
     stored.draft?.frame?.beautifyLook === 'poster' && stored.draft?.frame?.beautifyPadding === 33,
@@ -3530,8 +3528,8 @@ async function testBeautifyLooks(browser, base, messages) {
   back.on('pageerror', (err) => backCrashes.push(String(err)));
   await back.evaluateOnNewDocument(installChromeStub, messages, {
     ...seed,
-    'openscreenshot:settings': { ...stored.settings },
-    'openscreenshot:draft': stored.draft,
+    'pagegrab:settings': { ...stored.settings },
+    'pagegrab:draft': stored.draft,
   });
   await back.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await back.waitForSelector('.draft-restore', { timeout: 5000 });
@@ -3582,7 +3580,7 @@ async function testBeautifyLooks(browser, base, messages) {
   fresh.on('pageerror', (err) => freshCrashes.push(String(err)));
   await fresh.evaluateOnNewDocument(installChromeStub, messages, {
     ...seed,
-    'openscreenshot:settings': { ...stored.settings },
+    'pagegrab:settings': { ...stored.settings },
   });
   await fresh.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await fresh.waitForSelector('.stage-canvas');
@@ -3621,7 +3619,7 @@ async function testCropHandlesAndUndo(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeStripedCapture(),
+    'pagegrab:last-capture': await makeStripedCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -4046,12 +4044,12 @@ async function testCropHandlesAndUndo(browser, base, messages) {
 /**
  * task 28: the capture history shelf — lists shelf entries, opens one onto
  * the canvas (a real swap, not just closing the modal), and deletes one
- * behind a two-tap confirm. Seeds `openscreenshot:captures` +
- * `openscreenshot:capture-image:{id}` directly (the shape setLastCapture
+ * behind a two-tap confirm. Seeds `pagegrab:captures` +
+ * `pagegrab:capture-image:{id}` directly (the shape setLastCapture
  * itself writes) rather than driving a live import, so this test is about
  * the shelf's own list/open/delete wiring — real thumbnail encoding is
  * already exercised for real by every other test in this file (they all
- * seed the legacy `openscreenshot:last-capture` key, which migrates through
+ * seed the legacy `pagegrab:last-capture` key, which migrates through
  * the real makeThumbnail encoder on first read; task-28-report.md has that
  * regression run).
  */
@@ -4068,7 +4066,7 @@ async function testCaptureHistoryShelf(browser, base, messages) {
   const tinyThumb =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:captures': [
+    'pagegrab:captures': [
       {
         id: idGreen,
         thumbnail: tinyThumb,
@@ -4088,8 +4086,8 @@ async function testCaptureHistoryShelf(browser, base, messages) {
         capturedAt: 1000,
       },
     ],
-    [`openscreenshot:capture-image:${idGreen}`]: capGreen.dataUrl,
-    [`openscreenshot:capture-image:${idBlue}`]: capBlue.dataUrl,
+    [`pagegrab:capture-image:${idGreen}`]: capGreen.dataUrl,
+    [`pagegrab:capture-image:${idBlue}`]: capBlue.dataUrl,
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -4263,7 +4261,7 @@ async function testPinToFloatingWindow(browser, base, messages) {
       });
     });
     await page.evaluateOnNewDocument(installChromeStub, messages, {
-      'openscreenshot:last-capture': await makeCapture(),
+      'pagegrab:last-capture': await makeCapture(),
     });
     await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
     await page.waitForSelector('.stage-canvas');
@@ -4285,7 +4283,7 @@ async function testPinToFloatingWindow(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -4382,7 +4380,7 @@ async function testPinToFloatingWindow(browser, base, messages) {
     });
   });
   await page3.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page3.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page3.waitForSelector('.stage-canvas');
@@ -4411,7 +4409,7 @@ async function testBlurStrength(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCheckerCapture(),
+    'pagegrab:last-capture': await makeCheckerCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -4563,7 +4561,7 @@ async function testAnnotationClipMatchesExport(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(), // 800x600, solid rgb(60,110,190)
+    'pagegrab:last-capture': await makeCapture(), // 800x600, solid rgb(60,110,190)
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -4680,7 +4678,7 @@ async function testStrokeWidthPreviewDistinct(browser, base, messages) {
   const crashes = [];
   page.on('pageerror', (err) => crashes.push(String(err)));
   await page.evaluateOnNewDocument(installChromeStub, messages, {
-    'openscreenshot:last-capture': await makeCapture(),
+    'pagegrab:last-capture': await makeCapture(),
   });
   await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.stage-canvas');
@@ -4724,7 +4722,7 @@ async function main() {
 
   const messages = JSON.parse(await readFile(join(DIST, '_locales/en/messages.json'), 'utf8'));
   const puppeteer = await loadPuppeteer(ROOT);
-  const work = await mkdtemp(join(tmpdir(), 'oss-editor-smoke-'));
+  const work = await mkdtemp(join(tmpdir(), 'pagegrab-editor-smoke-'));
   const server = await serveDist(DIST);
   const base = `http://127.0.0.1:${server.address().port}`;
   console.log(`serving dist/ on ${base}`);
@@ -4744,7 +4742,7 @@ async function main() {
       if (msg.type() === 'error') console.log(`    console.error: ${msg.text()}`);
     });
     await page.evaluateOnNewDocument(installChromeStub, messages, {
-      'openscreenshot:last-capture': await makeCapture(),
+      'pagegrab:last-capture': await makeCapture(),
     });
     await page.goto(`${base}${PAGE}`, { waitUntil: 'networkidle0' });
 

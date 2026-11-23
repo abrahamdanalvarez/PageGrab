@@ -61,7 +61,7 @@ export function popupWarnings(
  * Session key holding a Record click that is waiting on the tabCapture grant.
  * The popup writes it; the worker consumes it from `permissions.onAdded`.
  */
-export const PENDING_RECORD_KEY = 'openscreenshot:pending-record';
+export const PENDING_RECORD_KEY = 'pagegrab:pending-record';
 
 /**
  * How long a parked click stays startable. It has to outlast a human reading
