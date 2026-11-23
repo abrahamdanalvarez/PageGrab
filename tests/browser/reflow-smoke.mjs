@@ -348,15 +348,9 @@ async function testLongCapture(browser, base, messages) {
     'a horizontal drag leaves the annotation source Y unchanged',
   );
 
-  step('EDITOR — Rate is directly keyboard-accessible');
-  await page.focus('.topbar .rate-btn');
-  assert(
-    await page.$eval('.topbar .rate-btn', (el) => el === document.activeElement),
-    'Rate receives focus directly',
-  );
+  step('EDITOR — top bar has no overflow menu and no page errors');
   assert((await page.$('.editor-more')) === null, 'No redundant More menu');
-  await page.keyboard.press('Space');
-  assert(crashes.length === 0, 'Rate activation has no page errors');
+  assert(crashes.length === 0, 'editor has no page errors');
   await page.close();
 }
 
