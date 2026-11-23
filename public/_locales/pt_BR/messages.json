@@ -2513,6 +2513,18 @@
     "message": "Capturando tela…",
     "description": "Capture overlay status."
   },
+  "captureStop": {
+    "message": "Parar aqui",
+    "description": "Popup button shown during a full-page capture; ends it early and keeps the part captured so far."
+  },
+  "captureStopTitle": {
+    "message": "Encerra a captura aqui e mantém o que já foi capturado. Você também pode pressionar Esc na página.",
+    "description": "Tooltip for the Stop button."
+  },
+  "captureStopping": {
+    "message": "Parando…",
+    "description": "Stop button label after it is pressed, while the capture finishes."
+  },
   "captureOverlayDetail": {
     "message": "Mantenha esta aba aberta enquanto capturamos a página.",
     "description": "Capture overlay status."
@@ -2566,50 +2578,6 @@
   "settingsStopRecording": {
     "message": "Parar gravação"
   },
-  "captureReady": {
-    "message": "Captura pronta",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureOpenEditor": {
-    "message": "Abrir editor",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureCopied": {
-    "message": "Captura copiada para a área de transferência!",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureSaved": {
-    "message": "O download da sua captura está começando.",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureQuickCopy": {
-    "message": "Copiar",
-    "description": "Capture progress window: quick-action button that copies the screenshot to the clipboard."
-  },
-  "captureQuickCopyTitle": {
-    "message": "Copiar para a área de transferência",
-    "description": "Capture progress window: tooltip for the Copy quick action."
-  },
-  "captureQuickPng": {
-    "message": "PNG",
-    "description": "Capture progress window: quick-action button that downloads the screenshot as PNG."
-  },
-  "captureQuickPngTitle": {
-    "message": "Baixar como PNG",
-    "description": "Capture progress window: tooltip for the PNG quick action."
-  },
-  "captureQuickPdf": {
-    "message": "PDF",
-    "description": "Capture progress window: quick-action button that saves the screenshot as PDF via the editor."
-  },
-  "captureQuickPdfTitle": {
-    "message": "Salvar como PDF",
-    "description": "Capture progress window: tooltip for the PDF quick action."
-  },
-  "captureBack": {
-    "message": "Voltar à captura",
-    "description": "Settings: return to the capture dialog that opened this tab."
-  },
   "restrictedTitle": {
     "message": "Não é possível capturar esta página",
     "description": "Toolbar popup shown on browser-restricted pages."
@@ -2641,39 +2609,6 @@
   "supportBody": {
     "description": "Optional project support and rating message.",
     "message": "O PageGrab é totalmente de código aberto. Se ele é útil para você, uma doação ajuda no desenvolvimento e uma avaliação ajuda outras pessoas a descobri-lo."
-  },
-  "capturePasteHint": {
-    "message": "Cole onde quiser com ⌘V / Ctrl+V.",
-    "description": "Capture progress window: how to paste a copied screenshot."
-  },
-  "captureDownloadHint": {
-    "message": "Se não começar,",
-    "description": "Capture progress window: download retry hint, followed by a download again button."
-  },
-  "captureDownloadAgain": {
-    "message": "baixe novamente",
-    "description": "Capture progress window: button to retry the PNG download."
-  },
-  "captureReportTitle": {
-    "message": "Help diagnose this capture error"
-  },
-  "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve PageGrab."
-  },
-  "captureReportDetails": {
-    "message": "Technical details (optional)"
-  },
-  "captureReportSend": {
-    "message": "Send error report"
-  },
-  "captureReportSending": {
-    "message": "Sending…"
-  },
-  "captureReportSent": {
-    "message": "Thanks — the error report was sent."
-  },
-  "captureReportFailed": {
-    "message": "Couldn’t send the report. Check your connection and try again."
   },
   "ctlPageTitle": {
     "message": "Gravar uma aba",

@@ -2513,6 +2513,18 @@
     "message": "正在截图…",
     "description": "Capture overlay status."
   },
+  "captureStop": {
+    "message": "在此停止",
+    "description": "Popup button shown during a full-page capture; ends it early and keeps the part captured so far."
+  },
+  "captureStopTitle": {
+    "message": "在此结束截图并保留已截取的部分。也可以在页面上按 Esc。",
+    "description": "Tooltip for the Stop button."
+  },
+  "captureStopping": {
+    "message": "正在停止…",
+    "description": "Stop button label after it is pressed, while the capture finishes."
+  },
   "captureOverlayDetail": {
     "message": "截图期间，请保持此标签页打开。",
     "description": "Capture overlay status."
@@ -2566,50 +2578,6 @@
   "settingsStopRecording": {
     "message": "停止录制"
   },
-  "captureReady": {
-    "message": "截图已就绪",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureOpenEditor": {
-    "message": "打开编辑器",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureCopied": {
-    "message": "截图已复制到剪贴板！",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureSaved": {
-    "message": "正在开始下载截图。",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureQuickCopy": {
-    "message": "复制",
-    "description": "Capture progress window: quick-action button that copies the screenshot to the clipboard."
-  },
-  "captureQuickCopyTitle": {
-    "message": "复制到剪贴板",
-    "description": "Capture progress window: tooltip for the Copy quick action."
-  },
-  "captureQuickPng": {
-    "message": "PNG",
-    "description": "Capture progress window: quick-action button that downloads the screenshot as PNG."
-  },
-  "captureQuickPngTitle": {
-    "message": "下载为 PNG",
-    "description": "Capture progress window: tooltip for the PNG quick action."
-  },
-  "captureQuickPdf": {
-    "message": "PDF",
-    "description": "Capture progress window: quick-action button that saves the screenshot as PDF via the editor."
-  },
-  "captureQuickPdfTitle": {
-    "message": "另存为 PDF",
-    "description": "Capture progress window: tooltip for the PDF quick action."
-  },
-  "captureBack": {
-    "message": "返回截图",
-    "description": "Settings: return to the capture dialog that opened this tab."
-  },
   "restrictedTitle": {
     "message": "无法截取此页面",
     "description": "Toolbar popup shown on browser-restricted pages."
@@ -2641,39 +2609,6 @@
   "supportBody": {
     "description": "Optional project support and rating message.",
     "message": "PageGrab 完全开源。如果它对你有帮助，捐赠可以支持项目开发，简短的评价也能帮助更多人发现它。"
-  },
-  "capturePasteHint": {
-    "message": "按 ⌘V / Ctrl+V 粘贴到任意位置。",
-    "description": "Capture progress window: how to paste a copied screenshot."
-  },
-  "captureDownloadHint": {
-    "message": "如果下载未开始，",
-    "description": "Capture progress window: download retry hint, followed by a download again button."
-  },
-  "captureDownloadAgain": {
-    "message": "重新下载",
-    "description": "Capture progress window: button to retry the PNG download."
-  },
-  "captureReportTitle": {
-    "message": "Help diagnose this capture error"
-  },
-  "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve PageGrab."
-  },
-  "captureReportDetails": {
-    "message": "Technical details (optional)"
-  },
-  "captureReportSend": {
-    "message": "Send error report"
-  },
-  "captureReportSending": {
-    "message": "Sending…"
-  },
-  "captureReportSent": {
-    "message": "Thanks — the error report was sent."
-  },
-  "captureReportFailed": {
-    "message": "Couldn’t send the report. Check your connection and try again."
   },
   "ctlPageTitle": {
     "message": "录制标签页",

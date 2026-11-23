@@ -33,6 +33,10 @@ let captureAction: 'editor' | 'clipboard' | 'download';
 let sourceTabActive: boolean;
 let switchTabAfterSelection: boolean;
 let switchTabBeforeSnapshot: boolean;
+/** Press Stop right after this snapshot number (0 = never). */
+let stopAfterSnapshot: number;
+let stopVia: 'message' | 'icon';
+let actionClick: (tab: unknown) => void;
 let fakeChrome: ReturnType<typeof makeChrome>;
 function makeChrome() {
   const noop = vi.fn(async () => undefined);
@@ -53,7 +57,11 @@ function makeChrome() {
       },
     },
     action: {
-      onClicked: { addListener: noop },
+      onClicked: {
+        addListener: (fn: typeof actionClick) => {
+          actionClick = fn;
+        },
+      },
       setPopup: noop,
       setBadgeBackgroundColor: noop,
       setBadgeTextColor: noop,
@@ -92,6 +100,10 @@ function makeChrome() {
         expect(overlayVisible, 'overlay must never be visible in captured pixels').toBe(false);
         captures++;
         if (failAt === `snapshot:${captures}`) throw new Error('capture failed');
+        if (captures === stopAfterSnapshot) {
+          if (stopVia === 'icon') actionClick({ id: 7 });
+          else listener({ type: 'CAPTURE_STOP' });
+        }
         return 'data:image/png;base64,tile';
       },
     },
@@ -164,6 +176,8 @@ beforeEach(async () => {
   sourceTabActive = true;
   switchTabAfterSelection = false;
   switchTabBeforeSnapshot = false;
+  stopAfterSnapshot = 0;
+  stopVia = 'message';
   vi.mocked(setLastCapture).mockClear();
   vi.mocked(setLastRegion).mockClear();
   failAt = undefined;
@@ -179,7 +193,7 @@ afterEach(() => {
 });
 
 describe('screenshot capture overlay lifecycle', () => {
-  it('shows external progress throughout capture without a page overlay', async () => {
+  it('shows progress in the popup and badge, never on the page or in a window', async () => {
     await capture();
     expect(captures).toBe(3);
     const snapshots = events.flatMap((event, index) => (event === 'snapshot' ? [index] : []));
@@ -187,11 +201,8 @@ describe('screenshot capture overlay lifecycle', () => {
       expect(events[index - 1]).toBe('overlay:hide');
     }
     expect(events).not.toContain('overlay:show');
-    expect(events.indexOf('window:open')).toBeLessThan(snapshots[0]);
-    expect(fakeChrome.windows.create).toHaveBeenCalledWith(
-      expect.objectContaining({ focused: true }),
-    );
-    expect(fakeChrome.windows.remove).toHaveBeenCalledWith(9);
+    expect(fakeChrome.windows.create).not.toHaveBeenCalled();
+    expect(events).toContain('deliver');
     expect(messages.filter((m) => m.type === 'CAPTURE_PROGRESS')).toEqual([
       { type: 'CAPTURE_PROGRESS', percent: 0 },
       { type: 'CAPTURE_PROGRESS', percent: 33 },
@@ -212,7 +223,8 @@ describe('screenshot capture overlay lifecycle', () => {
       failAt = stage;
       await capture();
       expect(events).toContain('restoreCapture');
-      expect(fakeChrome.windows.remove).toHaveBeenCalledWith(9);
+      if (stage !== 'prepareCapture')
+        expect(events.filter((e) => e === 'watchCaptureEscape')).toHaveLength(2);
       expect(events).toContain('overlay:remove');
       expect(overlayVisible).toBe(false);
       expect(messages.some((m) => m.type === 'CAPTURE_ERROR')).toBe(true);
@@ -264,31 +276,28 @@ describe('screenshot capture overlay lifecycle', () => {
     expect(messages.some((m) => m.type === 'CAPTURE_ERROR')).toBe(true);
   });
 
-  it('retains a live ready window and does not open the editor automatically', async () => {
-    fakeChrome.windows.get.mockImplementation(async () => ({}) as never);
-    await capture();
-    expect(events).not.toContain('deliver');
-    expect(fakeChrome.windows.remove).not.toHaveBeenCalled();
-    expect(messages).toContainEqual({
-      type: 'CAPTURE_WINDOW_PROGRESS',
-      percent: 100,
-      result: 'editor',
-      sourceWindowId: 1,
-    });
-  });
+  it.each(['message', 'icon'] as const)(
+    'stops a full-page capture early via %s and delivers the part captured so far',
+    async (via) => {
+      stopVia = via;
+      stopAfterSnapshot = 1;
+      await capture();
+      expect(captures).toBe(1);
+      // The page is 1500 px tall; one 600 px screen was captured before Stop.
+      expect(setLastCapture).toHaveBeenCalledWith(
+        expect.objectContaining({ mode: 'full-page', height: 600 }),
+      );
+      expect(events).toContain('deliver');
+      expect(events.filter((e) => e === 'watchCaptureEscape')).toHaveLength(2);
+      expect(events).toContain('restoreCapture');
+      expect(messages.some((m) => m.type === 'CAPTURE_COMPLETE')).toBe(true);
+    },
+  );
 
-  it('continues when opening the progress window fails', async () => {
-    fakeChrome.windows.create.mockRejectedValueOnce(new Error('blocked'));
+  it('ignores Stop when no capture is running', async () => {
+    listener({ type: 'CAPTURE_STOP' });
     await capture();
     expect(captures).toBe(3);
-    expect(messages.some((m) => m.type === 'CAPTURE_COMPLETE')).toBe(true);
-  });
-
-  it('continues when the user already closed the progress window', async () => {
-    fakeChrome.windows.remove.mockRejectedValueOnce(new Error('already closed'));
-    await capture();
-    expect(captures).toBe(3);
-    expect(messages.some((m) => m.type === 'CAPTURE_COMPLETE')).toBe(true);
   });
 
   it('ignores overlapping capture requests to protect tile and overlay ownership', async () => {

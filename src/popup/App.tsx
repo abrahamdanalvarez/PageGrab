@@ -1,4 +1,3 @@
-import { CaptureReturn } from './CaptureReturn';
 import { IS_FIREFOX, RECORDING_SUPPORTED } from '../shared/browser';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type {
@@ -228,6 +227,7 @@ export function App() {
   const [showSettings, setShowSettings] = useState(isSettingsPage);
   const [busy, setBusy] = useState<CaptureMode | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
+  const [stopping, setStopping] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>(() => {
     const message = new URLSearchParams(location.search).get('captureError');
     return message ? [{ id: Date.now(), message, tone: 'error' }] : [];
@@ -455,6 +455,7 @@ export function App() {
   function capture(mode: CaptureMode, repeat = false) {
     if (busy) return;
     setBusy(mode);
+    setStopping(false);
     // Selection overlays need the page free, delayed capture lets the user set
     // up a hover state, and clipboard capture needs page focus before writing.
     // Close the popup for each of these cases.
@@ -718,7 +719,6 @@ export function App() {
         )}
       </header>
 
-      {isSettingsPage && <CaptureReturn />}
       <div class="toasts" aria-live="polite">
         {toasts.map((toast) => (
           <div
@@ -822,6 +822,19 @@ export function App() {
               );
             })}
           </nav>
+          {busy === 'full-page' && progress != null ? (
+            <button
+              class="btn-secondary capture-stop"
+              disabled={stopping}
+              title={t('captureStopTitle')}
+              onClick={() => {
+                setStopping(true);
+                void chrome.runtime.sendMessage({ type: 'CAPTURE_STOP' }).catch(() => {});
+              }}
+            >
+              {stopping ? t('captureStopping') : t('captureStop')}
+            </button>
+          ) : null}
 
           {RECORDING_SUPPORTED ? (
             <>

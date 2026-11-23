@@ -81,7 +81,7 @@ export function getMetrics(excludeScrollbars = false): Metrics {
   const root = scroller ?? de;
   if (scroller || documentScrolls) {
     for (const el of root.querySelectorAll<HTMLElement>('*')) {
-      if (el === document.body || el.dataset.ossExpanded !== undefined) continue;
+      if (el === document.body || el.dataset.pagegrabExpanded !== undefined) continue;
       if (el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') continue;
       const cs = getComputedStyle(el);
       if (cs.overflowY !== 'auto' && cs.overflowY !== 'scroll') continue;
@@ -108,8 +108,8 @@ export function getMetrics(excludeScrollbars = false): Metrics {
 
       const before = ancestors.map((a) => ({ height: a.clientHeight, overflow: a.scrollHeight }));
       const style = el.getAttribute('style');
-      el.dataset.ossExpanded = String(el.scrollTop);
-      if (style !== null) el.dataset.ossStyle = style;
+      el.dataset.pagegrabExpanded = String(el.scrollTop);
+      if (style !== null) el.dataset.pagegrabStyle = style;
       el.style.setProperty('height', 'auto', 'important');
       el.style.setProperty('max-height', 'none', 'important');
       // Flex or grid sizing can keep the box short. A parent that does not grow
@@ -125,15 +125,15 @@ export function getMetrics(excludeScrollbars = false): Metrics {
       if (!fits) {
         if (style === null) el.removeAttribute('style');
         else el.setAttribute('style', style);
-        el.scrollTop = Number(el.dataset.ossExpanded);
-        delete el.dataset.ossExpanded;
-        delete el.dataset.ossStyle;
+        el.scrollTop = Number(el.dataset.pagegrabExpanded);
+        delete el.dataset.pagegrabExpanded;
+        delete el.dataset.pagegrabStyle;
       }
     }
   }
 
   if (scroller) {
-    scroller.dataset.ossScroller = '1';
+    scroller.dataset.pagegrabScroller = '1';
     const r = scroller.getBoundingClientRect();
     return {
       scrollHeight: scroller.scrollHeight,
@@ -169,14 +169,14 @@ export function getMetrics(excludeScrollbars = false): Metrics {
  */
 export function prepareCapture(): void {
   const win = window as Window & {
-    __ossCaptureState?: {
+    __pagegrabCaptureState?: {
       style: HTMLStyleElement;
       positions: Array<{ el: HTMLElement; left: number; top: number }>;
       behavior: Array<{ el: HTMLElement; value: string; priority: string }>;
       colors: Array<{ el: HTMLElement; value: string; priority: string }>;
     };
   };
-  if (win.__ossCaptureState) return;
+  if (win.__pagegrabCaptureState) return;
   const root = document.documentElement;
   const scroller = document.querySelector<HTMLElement>('[data-pagegrab-scroller="1"]');
   const scrollRoot = (document.scrollingElement as HTMLElement | null) ?? root;
@@ -207,7 +207,7 @@ export function prepareCapture(): void {
       box-shadow: none !important; visibility: hidden !important;
     }
   `;
-  win.__ossCaptureState = {
+  win.__pagegrabCaptureState = {
     style,
     colors: colored.map((el) => ({
       el,
@@ -242,13 +242,13 @@ export function hideFixedElements(): void {
     const cs = getComputedStyle(el);
     if (cs.position === 'fixed' || cs.position === 'sticky') {
       if (el.hasAttribute('data-pagegrab-hidden')) continue;
-      (el as HTMLElement).dataset.ossVisibility = (el as HTMLElement).style.getPropertyValue(
+      (el as HTMLElement).dataset.pagegrabVisibility = (el as HTMLElement).style.getPropertyValue(
         'visibility',
       );
-      (el as HTMLElement).dataset.ossVisibilityPriority = (
+      (el as HTMLElement).dataset.pagegrabVisibilityPriority = (
         el as HTMLElement
       ).style.getPropertyPriority('visibility');
-      (el as HTMLElement).dataset.ossHidden = '1';
+      (el as HTMLElement).dataset.pagegrabHidden = '1';
       (el as HTMLElement).style.setProperty('visibility', 'hidden', 'important');
     }
   }
@@ -272,39 +272,55 @@ export function scrollToPosition(y: number): { scrollY: number; atBottom: boolea
   return { scrollY: after, atBottom: after >= max - 1 };
 }
 
+/**
+ * Esc on the page stops a running full-page capture; the worker keeps what it
+ * has so far. Pass false to remove the listener. Serialized by executeScript.
+ */
+export function watchCaptureEscape(active: boolean): void {
+  const win = window as Window & { __pagegrabCaptureEscape?: (e: KeyboardEvent) => void };
+  if (win.__pagegrabCaptureEscape)
+    window.removeEventListener('keydown', win.__pagegrabCaptureEscape, true);
+  delete win.__pagegrabCaptureEscape;
+  if (!active) return;
+  win.__pagegrabCaptureEscape = (e) => {
+    if (e.key === 'Escape') void chrome.runtime.sendMessage({ type: 'CAPTURE_STOP' });
+  };
+  window.addEventListener('keydown', win.__pagegrabCaptureEscape, true);
+}
+
 /** Restore the page to its pre-capture state. */
 export function restoreCapture(): void {
   // Shrink expanded boxes first, so the scroll positions below land where they were.
   for (const el of document.querySelectorAll<HTMLElement>('[data-pagegrab-expanded]')) {
-    if (el.dataset.ossStyle === undefined) el.removeAttribute('style');
-    else el.setAttribute('style', el.dataset.ossStyle);
-    el.scrollTop = Number(el.dataset.ossExpanded);
-    delete el.dataset.ossExpanded;
-    delete el.dataset.ossStyle;
+    if (el.dataset.pagegrabStyle === undefined) el.removeAttribute('style');
+    else el.setAttribute('style', el.dataset.pagegrabStyle);
+    el.scrollTop = Number(el.dataset.pagegrabExpanded);
+    delete el.dataset.pagegrabExpanded;
+    delete el.dataset.pagegrabStyle;
   }
   const hidden = document.querySelectorAll('[data-pagegrab-hidden="1"]');
   for (const el of hidden) {
     const node = el as HTMLElement;
-    if (node.dataset.ossVisibility)
+    if (node.dataset.pagegrabVisibility)
       node.style.setProperty(
         'visibility',
-        node.dataset.ossVisibility,
-        node.dataset.ossVisibilityPriority || '',
+        node.dataset.pagegrabVisibility,
+        node.dataset.pagegrabVisibilityPriority || '',
       );
     else node.style.removeProperty('visibility');
-    delete node.dataset.ossVisibility;
-    delete node.dataset.ossVisibilityPriority;
-    delete (el as HTMLElement).dataset.ossHidden;
+    delete node.dataset.pagegrabVisibility;
+    delete node.dataset.pagegrabVisibilityPriority;
+    delete (el as HTMLElement).dataset.pagegrabHidden;
   }
   const win = window as Window & {
-    __ossCaptureState?: {
+    __pagegrabCaptureState?: {
       style: HTMLStyleElement;
       positions: Array<{ el: HTMLElement; left: number; top: number }>;
       behavior: Array<{ el: HTMLElement; value: string; priority: string }>;
       colors: Array<{ el: HTMLElement; value: string; priority: string }>;
     };
   };
-  const state = win.__ossCaptureState;
+  const state = win.__pagegrabCaptureState;
   if (state) {
     // Restore position while smooth scrolling and scroll snapping are disabled.
     for (const { el, left, top } of state.positions) {
@@ -320,10 +336,10 @@ export function restoreCapture(): void {
       else el.style.removeProperty('scrollbar-color');
     }
     state.style.remove();
-    delete win.__ossCaptureState;
+    delete win.__pagegrabCaptureState;
   }
   const scroller = document.querySelector<HTMLElement>('[data-pagegrab-scroller="1"]');
-  if (scroller) delete scroller.dataset.ossScroller;
+  if (scroller) delete scroller.dataset.pagegrabScroller;
 }
 
 /**

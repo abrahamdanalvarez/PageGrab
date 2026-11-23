@@ -1,10 +1,3 @@
-import {
-  openCaptureProgress,
-  closeCaptureProgress,
-  setCaptureProgress,
-  getCaptureProgress,
-  finishCaptureProgress,
-} from './capture-progress';
 import { downloadDataUrl } from '../shared/download';
 import { IS_FIREFOX } from '../shared/browser';
 /**
@@ -47,6 +40,7 @@ import {
   MAX_CANVAS_HEIGHT_PX,
   MAX_CAPTURE_PARTS,
   splitHeight,
+  truncateParts,
 } from '../shared/geometry';
 import {
   cropTile,
@@ -57,6 +51,7 @@ import {
   restoreCapture,
   scrollToPosition,
   stitchTiles,
+  watchCaptureEscape,
 } from '../content/scroll-capture';
 import { updateCaptureOverlay } from '../content/capture-overlay';
 import { selectRegion } from '../content/region-select';
@@ -220,6 +215,11 @@ chrome.runtime.onStartup.addListener(() => void syncExpressMode());
 // the setting here closes it — the click binds the popup and opens it rather
 // than capturing something nobody asked for.
 chrome.action.onClicked.addListener((tab) => {
+  // Express mode has no popup, so a second click on the icon is its Stop button.
+  if (captureActive) {
+    stopRequested = true;
+    return;
+  }
   void (async () => {
     const { expressMode } = await getSettings();
     if (!expressMode) {
@@ -292,7 +292,7 @@ chrome.commands.onCommand.addListener((command) => {
   if (mode) void handleCapture(mode).catch(onCaptureError);
 });
 
-chrome.runtime.onMessage.addListener((message: unknown, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message: unknown) => {
   if (
     (message as { type?: string })?.type === 'RESTRICTED_POPUP_OPENED' ||
     (message as { type?: string })?.type === 'CAPTURE_ERROR_POPUP_OPENED'
@@ -300,13 +300,9 @@ chrome.runtime.onMessage.addListener((message: unknown, _sender, sendResponse) =
     void syncExpressMode();
     return false;
   }
-  if ((message as { type?: string })?.type === 'GET_CAPTURE_PROGRESS') {
-    sendResponse(getCaptureProgress());
+  if ((message as { type?: string })?.type === 'CAPTURE_STOP') {
+    if (captureActive) stopRequested = true;
     return false;
-  }
-  if ((message as { type?: string })?.type === 'CAPTURE_QUICK_ACTION') {
-    void handleCaptureQuickAction(message).then(sendResponse);
-    return true;
   }
   if (isCaptureRequest(message)) {
     void handleCapture(message.mode, message.repeat === true).catch(onCaptureError);
@@ -316,17 +312,16 @@ chrome.runtime.onMessage.addListener((message: unknown, _sender, sendResponse) =
 
 // A capture owns the page scroll state and overlay until its final cleanup.
 let captureActive = false;
+/** Set by the popup's Stop button or Esc on the page; a full-page capture keeps what it has. */
+let stopRequested = false;
 
 async function handleCapture(mode: CaptureMode, repeatRegion = false): Promise<void> {
   if (captureActive) return;
   captureActive = true;
+  stopRequested = false;
   try {
-    await closeCaptureProgress();
-    // Also dismiss a ready window that outlived a service-worker restart.
-    void chrome.runtime.sendMessage({ type: 'CAPTURE_STARTED' }).catch(() => {});
     await runCapture(mode, repeatRegion);
   } finally {
-    if (!getCaptureProgress()?.result) await closeCaptureProgress();
     captureActive = false;
   }
 }
@@ -612,7 +607,9 @@ async function captureFullPage(tab: chrome.tabs.Tab): Promise<void> {
   const dpr = metrics.devicePixelRatio;
   const canvasHeight = Math.round(metrics.scrollHeight * dpr);
   // One canvas cannot pass MAX_CANVAS_HEIGHT_PX, so a taller page becomes several images.
-  const parts = splitHeight(canvasHeight, MAX_CANVAS_HEIGHT_PX);
+  let parts = splitHeight(canvasHeight, MAX_CANVAS_HEIGHT_PX);
+  // Fixed up front: a stopped capture may end with fewer parts than it planned.
+  const multiPart = parts.length > 1;
   if (parts.length > MAX_CAPTURE_PARTS) {
     await runInTab(tabId, restoreCapture, []);
     broadcast({
@@ -642,7 +639,6 @@ async function captureFullPage(tab: chrome.tabs.Tab): Promise<void> {
       };
   const canvasWidth = crop.w;
 
-  await openCaptureProgress(windowId);
   try {
     let tiles: TileSpec[] = [];
     const captureIds: string[] = [];
@@ -664,7 +660,7 @@ async function captureFullPage(tab: chrome.tabs.Tab): Promise<void> {
           crop,
         ]);
         if (stitched === 0) firstPartUrl = dataUrl;
-        if (parts.length > 1) {
+        if (multiPart) {
           captureIds.push(
             await setLastCapture(
               {
@@ -685,16 +681,23 @@ async function captureFullPage(tab: chrome.tabs.Tab): Promise<void> {
         if (next) tiles = tiles.filter((t) => t.y + crop.h > next.top);
       }
     };
+    // Bottom of the last captured screen: where a stopped capture ends.
+    let coveredBottom = 0;
+    let stopped = false;
+    const addTile = (dataUrl: string, y: number): void => {
+      tiles.push({ dataUrl, y });
+      coveredBottom = Math.min(canvasHeight, y + crop.h);
+    };
     // Disable smooth scrolling (but keep fixed elements visible) for the first tile.
     try {
       await runInTab(tabId, prepareCapture, []);
+      await runInTab(tabId, watchCaptureEscape, [true]);
       await reportProgress(0, positions.length);
       // Tile 0: capture at the top with fixed elements visible so a fixed header
       // appears once at the top of the final image (instead of being omitted).
       {
         await execInTab(tabId, scrollToPosition, [positions[0]]);
-        const first = await captureVisibleTabPng(tabId, windowId);
-        tiles.push({ dataUrl: first, y: 0 });
+        addTile(await captureVisibleTabPng(tabId, windowId), 0);
         await reportProgress(1, positions.length);
       }
       // Remaining tiles: hide fixed elements so they don't duplicate.
@@ -702,35 +705,39 @@ async function captureFullPage(tab: chrome.tabs.Tab): Promise<void> {
         await runInTab(tabId, hideFixedElements, []);
         for (let i = 1; i < positions.length; i++) {
           await delay(CAPTURE_THROTTLE_MS);
+          if (stopRequested) {
+            stopped = true;
+            break;
+          }
           const { scrollY } = await execInTab(tabId, scrollToPosition, [positions[i]]);
           const dataUrl = await captureVisibleTabPng(tabId, windowId);
           const y = Math.round(scrollY * dpr);
-          tiles.push({ dataUrl, y });
+          addTile(dataUrl, y);
           await reportProgress(i + 1, positions.length);
           if (parts.length > 1) await flushParts(y + crop.h);
         }
       }
     } finally {
+      await runInTab(tabId, watchCaptureEscape, [false]).catch(() => undefined);
       await runInTab(tabId, restoreCapture, []);
     }
 
-    setCaptureProgress(null);
+    if (stopped) parts = truncateParts(parts, coveredBottom);
     // Rounding can leave the last tile a pixel short of the page bottom, so the
     // last part (and a page that fits one image) stitches here.
     await flushParts(Infinity);
-    const delivered =
-      parts.length > 1
-        ? await deliverCaptureParts(captureIds, windowId)
-        : await deliverCapture(
-            tabId,
-            firstPartUrl,
-            canvasWidth,
-            canvasHeight,
-            'full-page',
-            tab.title ?? '',
-            tab.url ?? '',
-            windowId,
-          );
+    const delivered = multiPart
+      ? await deliverCaptureParts(captureIds, windowId)
+      : await deliverCapture(
+          tabId,
+          firstPartUrl,
+          canvasWidth,
+          parts[0].height,
+          'full-page',
+          tab.title ?? '',
+          tab.url ?? '',
+          windowId,
+        );
     if (delivered) {
       broadcast({
         type: 'CAPTURE_COMPLETE',
@@ -747,7 +754,6 @@ async function captureFullPage(tab: chrome.tabs.Tab): Promise<void> {
 /** Progress stays outside captured pixels: the popup and toolbar badge. */
 async function reportProgress(done: number, total: number): Promise<void> {
   const percent = Math.round((done / total) * 100);
-  setCaptureProgress(percent);
   broadcast({ type: 'CAPTURE_PROGRESS', percent });
   if (total < 2) return;
   await chrome.action.setBadgeBackgroundColor({ color: '#1967d2' });
@@ -790,7 +796,7 @@ async function deliverCapture(
   url: string,
   windowId: number,
 ): Promise<boolean> {
-  const captureId = await setLastCapture({
+  await setLastCapture({
     dataUrl,
     width,
     height,
@@ -803,9 +809,7 @@ async function deliverCapture(
   const action = normalizeCaptureAction(settings.captureAction);
 
   if (action === 'editor') {
-    if (!(await finishCaptureProgress('editor', windowId, captureId))) {
-      await chrome.tabs.create({ url: EDITOR_URL, windowId });
-    }
+    await chrome.tabs.create({ url: EDITOR_URL, windowId });
     // The editor tab is the confirmation, so any progress badge left by a
     // full-page stitch hands the badge back here. The clipboard and download
     // branches below end on their own tick instead.
@@ -814,10 +818,6 @@ async function deliverCapture(
   }
 
   if (action === 'clipboard') {
-    // Clipboard writes run in the source document and require that window's focus.
-    if (getCaptureProgress()) {
-      await chrome.windows.update(windowId, { focused: true }).catch(() => {});
-    }
     const copied = await execInTab(tabId, copyImageToClipboard, [dataUrl]);
     if (!copied) {
       broadcast({
@@ -827,7 +827,6 @@ async function deliverCapture(
       });
       return false;
     }
-    await finishCaptureProgress('clipboard', windowId, captureId);
     void flashDoneBadge();
     return true;
   }
@@ -845,19 +844,15 @@ async function deliverCapture(
     });
     return false;
   }
-  await finishCaptureProgress('download', windowId, captureId);
   void flashDoneBadge();
   return true;
 }
 
 /**
- * Deliver a full-page capture split into several stored parts. The progress
- * window's ready state and its quick actions hold one capture, so it closes.
- * The clipboard holds one image, so that action opens every part in the
- * editor, one tab per part.
+ * Deliver a full-page capture split into several stored parts. The clipboard
+ * holds one image, so that action opens every part in the editor, one tab per part.
  */
 async function deliverCaptureParts(captureIds: string[], windowId: number): Promise<boolean> {
-  await closeCaptureProgress();
   const settings = await getSettings();
   if (normalizeCaptureAction(settings.captureAction) === 'download') {
     try {
@@ -883,32 +878,6 @@ async function deliverCaptureParts(captureIds: string[], windowId: number): Prom
   }
   await restoreRecBadge();
   return true;
-}
-
-/**
- * Quick actions from the capture progress window act on an already-stashed
- * capture, so they work without the editor. Only the PNG download runs here:
- * the clipboard write needs a focused page (the progress window does its
- * own), and PDF export stays in the editor.
- */
-async function handleCaptureQuickAction(message: unknown): Promise<{ ok: boolean }> {
-  const { action, captureId } = (message ?? {}) as { action?: string; captureId?: string };
-  if (action !== 'png' || !captureId) return { ok: false };
-  try {
-    const capture = await openCapture(captureId);
-    if (!capture) return { ok: false };
-    const settings = await getSettings();
-    const base = formatFilename(settings.filenameTemplate, {
-      title: capture.title,
-      url: capture.url,
-      width: capture.width,
-      height: capture.height,
-    });
-    await downloadDataUrl(capture.dataUrl, `${base}.png`);
-    return { ok: true };
-  } catch {
-    return { ok: false };
-  }
 }
 
 function commandToMode(command: string): CaptureMode | null {

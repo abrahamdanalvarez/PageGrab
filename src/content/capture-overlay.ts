@@ -9,7 +9,7 @@ export async function updateCaptureOverlay(
   detail = '',
 ): Promise<void> {
   const win = window as Window & {
-    __ossCaptureOverlay?: {
+    __pagegrabCaptureOverlay?: {
       host: HTMLDivElement;
       title: HTMLDivElement;
       detail: HTMLDivElement;
@@ -18,10 +18,10 @@ export async function updateCaptureOverlay(
       percent: HTMLSpanElement;
     };
   };
-  let state = win.__ossCaptureOverlay;
+  let state = win.__pagegrabCaptureOverlay;
   if (action === 'remove') {
     state?.host.remove();
-    delete win.__ossCaptureOverlay;
+    delete win.__pagegrabCaptureOverlay;
     return;
   }
   if (action === 'hide') {
@@ -49,7 +49,7 @@ export async function updateCaptureOverlay(
   }
   if (!state?.host.isConnected) {
     const host = document.createElement('div');
-    host.dataset.ossCaptureOverlay = '1';
+    host.dataset.pagegrabCaptureOverlay = '1';
     host.style.cssText = `all:initial!important;position:fixed!important;inset:auto 20px 20px auto!important;
       width:min(340px,calc(100vw - 32px))!important;z-index:2147483647!important;
       pointer-events:none!important;visibility:visible!important;display:block!important;
@@ -108,7 +108,7 @@ export async function updateCaptureOverlay(
     card.append(heading, detailNode, row);
     root.append(style, card);
     state = { host, title: titleNode, detail: detailNode, progress, fill, percent: percentNode };
-    win.__ossCaptureOverlay = state;
+    win.__pagegrabCaptureOverlay = state;
     document.documentElement.append(host);
   }
   state.host.style.setProperty('display', 'block', 'important');

@@ -32,6 +32,19 @@ export function splitHeight(height: number, maxHeight: number): { top: number; h
 }
 
 /**
+ * Cut `parts` off at `bottom` (device px) for a capture stopped part-way:
+ * parts that start at or below it are dropped, and the last kept part ends at it.
+ */
+export function truncateParts(
+  parts: { top: number; height: number }[],
+  bottom: number,
+): { top: number; height: number }[] {
+  return parts
+    .filter((p) => p.top < bottom)
+    .map((p) => ({ top: p.top, height: Math.min(p.height, bottom - p.top) }));
+}
+
+/**
  * Intersect a stored region rect (CSS px) with the current viewport, so a
  * repeated region never reads pixels outside the captured tile. Returns null
  * when less than 2×2 px remains — the same minimum the selection overlay

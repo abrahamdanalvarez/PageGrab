@@ -2513,6 +2513,18 @@
     "message": "スクリーンショットを撮影中…",
     "description": "Capture overlay status."
   },
+  "captureStop": {
+    "message": "ここで停止",
+    "description": "Popup button shown during a full-page capture; ends it early and keeps the part captured so far."
+  },
+  "captureStopTitle": {
+    "message": "ここでスクリーンショットを終了し、これまでの部分を保存します。ページ上で Esc を押しても停止できます。",
+    "description": "Tooltip for the Stop button."
+  },
+  "captureStopping": {
+    "message": "停止中…",
+    "description": "Stop button label after it is pressed, while the capture finishes."
+  },
   "captureOverlayDetail": {
     "message": "ページの撮影中は、このタブを開いたままにしてください。",
     "description": "Capture overlay status."
@@ -2566,50 +2578,6 @@
   "settingsStopRecording": {
     "message": "録画を停止"
   },
-  "captureReady": {
-    "message": "スクリーンショットの準備ができました",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureOpenEditor": {
-    "message": "エディターを開く",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureCopied": {
-    "message": "スクリーンショットをクリップボードにコピーしました！",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureSaved": {
-    "message": "スクリーンショットのダウンロードを開始します。",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureQuickCopy": {
-    "message": "コピー",
-    "description": "Capture progress window: quick-action button that copies the screenshot to the clipboard."
-  },
-  "captureQuickCopyTitle": {
-    "message": "クリップボードにコピー",
-    "description": "Capture progress window: tooltip for the Copy quick action."
-  },
-  "captureQuickPng": {
-    "message": "PNG",
-    "description": "Capture progress window: quick-action button that downloads the screenshot as PNG."
-  },
-  "captureQuickPngTitle": {
-    "message": "PNGとしてダウンロード",
-    "description": "Capture progress window: tooltip for the PNG quick action."
-  },
-  "captureQuickPdf": {
-    "message": "PDF",
-    "description": "Capture progress window: quick-action button that saves the screenshot as PDF via the editor."
-  },
-  "captureQuickPdfTitle": {
-    "message": "PDFとして保存",
-    "description": "Capture progress window: tooltip for the PDF quick action."
-  },
-  "captureBack": {
-    "message": "キャプチャに戻る",
-    "description": "Settings: return to the capture dialog that opened this tab."
-  },
   "restrictedTitle": {
     "message": "このページはキャプチャできません",
     "description": "Toolbar popup shown on browser-restricted pages."
@@ -2641,39 +2609,6 @@
   "supportBody": {
     "description": "Optional project support and rating message.",
     "message": "PageGrabは完全にオープンソースです。役に立ったら、寄付で開発を支援できます。評価を投稿すると、より多くの人に知ってもらえます。"
-  },
-  "capturePasteHint": {
-    "message": "⌘V / Ctrl+V で好きな場所に貼り付けられます。",
-    "description": "Capture progress window: how to paste a copied screenshot."
-  },
-  "captureDownloadHint": {
-    "message": "ダウンロードが始まらない場合は、",
-    "description": "Capture progress window: download retry hint, followed by a download again button."
-  },
-  "captureDownloadAgain": {
-    "message": "もう一度ダウンロード",
-    "description": "Capture progress window: button to retry the PNG download."
-  },
-  "captureReportTitle": {
-    "message": "Help diagnose this capture error"
-  },
-  "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve PageGrab."
-  },
-  "captureReportDetails": {
-    "message": "Technical details (optional)"
-  },
-  "captureReportSend": {
-    "message": "Send error report"
-  },
-  "captureReportSending": {
-    "message": "Sending…"
-  },
-  "captureReportSent": {
-    "message": "Thanks — the error report was sent."
-  },
-  "captureReportFailed": {
-    "message": "Couldn’t send the report. Check your connection and try again."
   },
   "ctlPageTitle": {
     "message": "タブを録画",

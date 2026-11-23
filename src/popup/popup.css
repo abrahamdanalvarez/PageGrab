@@ -249,6 +249,11 @@ body:has(.app:not(.app-settings-page)) {
 }
 
 /* ---- Progress bar (full-page capture) ---- */
+.capture-stop {
+  align-self: center;
+  margin-top: var(--s-2);
+}
+
 .progress {
   position: absolute;
   left: 0;
@@ -1416,36 +1421,6 @@ label.settings-row .settings-label {
   white-space: normal;
   height: auto;
   min-height: 36px;
-}
-
-.capture-return {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-3);
-  padding: var(--s-4);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  background: var(--surface-1);
-}
-.capture-return-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-2);
-}
-.capture-return p {
-  width: 100%;
-  margin: 0;
-}
-
-.capture-return-primary {
-  background: var(--accent-ink);
-  color: var(--on-accent);
-  border-color: transparent;
-}
-.capture-return-primary:hover {
-  background: var(--accent-ink-hover);
 }
 
 .settings-nav-links {

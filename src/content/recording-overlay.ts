@@ -78,11 +78,11 @@ export function mountRecordingOverlay(
 ): 'fresh' | 'synced' {
   type SyncFn = (elapsedMs: number, paused: boolean, anchored: boolean) => void;
   const win = window as unknown as {
-    __ossRecOverlay?: () => void;
-    __ossRecSync?: SyncFn;
+    __pagegrabRecOverlay?: () => void;
+    __pagegrabRecSync?: SyncFn;
   };
-  if (win.__ossRecOverlay) {
-    win.__ossRecSync?.(elapsedMs, paused, anchored);
+  if (win.__pagegrabRecOverlay) {
+    win.__pagegrabRecSync?.(elapsedMs, paused, anchored);
     return 'synced';
   }
 
@@ -198,7 +198,7 @@ export function mountRecordingOverlay(
 
   // --- Re-sync ---------------------------------------------------------------
 
-  win.__ossRecSync = (nextElapsedMs, nextPaused, nextAnchored) => {
+  win.__pagegrabRecSync = (nextElapsedMs, nextPaused, nextAnchored) => {
     // Shift what is still buffered by the same amount the clock moves, so a
     // re-anchor cannot leave the last second of cursor events pointing at a
     // timestamp the video never had.
@@ -224,8 +224,8 @@ export function mountRecordingOverlay(
     window.removeEventListener('mousedown', onDown, true);
     window.removeEventListener('resize', onResize, true);
     window.removeEventListener('pagehide', onPageHide);
-    delete win.__ossRecOverlay;
-    delete win.__ossRecSync;
+    delete win.__pagegrabRecOverlay;
+    delete win.__pagegrabRecSync;
   }
 
   function onPageHide(): void {
@@ -237,6 +237,6 @@ export function mountRecordingOverlay(
   }
   window.addEventListener('pagehide', onPageHide);
 
-  win.__ossRecOverlay = cleanup;
+  win.__pagegrabRecOverlay = cleanup;
   return 'fresh';
 }

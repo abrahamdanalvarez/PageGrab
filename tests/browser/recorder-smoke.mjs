@@ -1635,7 +1635,7 @@ async function main() {
       const after = document.getElementsByTagName('*').length;
       window.dispatchEvent(new MouseEvent('mousedown', { clientX: 40, clientY: 30 }));
       await new Promise((done) => setTimeout(done, 1200));
-      window.__ossRecOverlay?.();
+      window.__pagegrabRecOverlay?.();
       return { before, after, first, again, sent };
     }, overlayFile);
     assert(logged.first === 'fresh' && logged.again === 'synced', 'mounts once, then re-syncs');

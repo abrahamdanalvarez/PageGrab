@@ -2513,6 +2513,18 @@
     "message": "Acquisizione dello screenshot…",
     "description": "Capture overlay status."
   },
+  "captureStop": {
+    "message": "Ferma qui",
+    "description": "Popup button shown during a full-page capture; ends it early and keeps the part captured so far."
+  },
+  "captureStopTitle": {
+    "message": "Termina lo screenshot qui e conserva quanto acquisito finora. Puoi anche premere Esc sulla pagina.",
+    "description": "Tooltip for the Stop button."
+  },
+  "captureStopping": {
+    "message": "Arresto…",
+    "description": "Stop button label after it is pressed, while the capture finishes."
+  },
   "captureOverlayDetail": {
     "message": "Mantieni aperta questa scheda mentre acquisiamo la pagina.",
     "description": "Capture overlay status."
@@ -2566,50 +2578,6 @@
   "settingsStopRecording": {
     "message": "Interrompi registrazione"
   },
-  "captureReady": {
-    "message": "Screenshot pronto",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureOpenEditor": {
-    "message": "Apri editor",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureCopied": {
-    "message": "Screenshot copiato negli appunti!",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureSaved": {
-    "message": "Il download dello screenshot sta iniziando.",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureQuickCopy": {
-    "message": "Copia",
-    "description": "Capture progress window: quick-action button that copies the screenshot to the clipboard."
-  },
-  "captureQuickCopyTitle": {
-    "message": "Copia negli appunti",
-    "description": "Capture progress window: tooltip for the Copy quick action."
-  },
-  "captureQuickPng": {
-    "message": "PNG",
-    "description": "Capture progress window: quick-action button that downloads the screenshot as PNG."
-  },
-  "captureQuickPngTitle": {
-    "message": "Scarica come PNG",
-    "description": "Capture progress window: tooltip for the PNG quick action."
-  },
-  "captureQuickPdf": {
-    "message": "PDF",
-    "description": "Capture progress window: quick-action button that saves the screenshot as PDF via the editor."
-  },
-  "captureQuickPdfTitle": {
-    "message": "Salva come PDF",
-    "description": "Capture progress window: tooltip for the PDF quick action."
-  },
-  "captureBack": {
-    "message": "Torna alla cattura",
-    "description": "Settings: return to the capture dialog that opened this tab."
-  },
   "restrictedTitle": {
     "message": "Impossibile catturare questa pagina",
     "description": "Toolbar popup shown on browser-restricted pages."
@@ -2641,39 +2609,6 @@
   "supportBody": {
     "description": "Optional project support and rating message.",
     "message": "PageGrab è completamente open source. Se ti è utile, una donazione ne sostiene lo sviluppo e una breve recensione aiuta altre persone a scoprirlo."
-  },
-  "capturePasteHint": {
-    "message": "Incollalo dove vuoi con ⌘V / Ctrl+V.",
-    "description": "Capture progress window: how to paste a copied screenshot."
-  },
-  "captureDownloadHint": {
-    "message": "Se non parte,",
-    "description": "Capture progress window: download retry hint, followed by a download again button."
-  },
-  "captureDownloadAgain": {
-    "message": "scarica di nuovo",
-    "description": "Capture progress window: button to retry the PNG download."
-  },
-  "captureReportTitle": {
-    "message": "Help diagnose this capture error"
-  },
-  "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve PageGrab."
-  },
-  "captureReportDetails": {
-    "message": "Technical details (optional)"
-  },
-  "captureReportSend": {
-    "message": "Send error report"
-  },
-  "captureReportSending": {
-    "message": "Sending…"
-  },
-  "captureReportSent": {
-    "message": "Thanks — the error report was sent."
-  },
-  "captureReportFailed": {
-    "message": "Couldn’t send the report. Check your connection and try again."
   },
   "ctlPageTitle": {
     "message": "Registra una scheda",

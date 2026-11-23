@@ -2513,6 +2513,18 @@
     "message": "Capturing screenshot…",
     "description": "Capture overlay status."
   },
+  "captureStop": {
+    "message": "Stop here",
+    "description": "Popup button shown during a full-page capture; ends it early and keeps the part captured so far."
+  },
+  "captureStopTitle": {
+    "message": "End the screenshot here and keep what is captured so far. You can also press Esc on the page.",
+    "description": "Tooltip for the Stop button."
+  },
+  "captureStopping": {
+    "message": "Stopping…",
+    "description": "Stop button label after it is pressed, while the capture finishes."
+  },
   "captureOverlayDetail": {
     "message": "Keep this tab open while we capture your page.",
     "description": "Capture overlay status."
@@ -2566,50 +2578,6 @@
   "settingsStopRecording": {
     "message": "Stop recording"
   },
-  "captureReady": {
-    "message": "Screenshot ready",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureOpenEditor": {
-    "message": "Open editor",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureCopied": {
-    "message": "Screenshot copied to your clipboard!",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureSaved": {
-    "message": "Your screenshot download is starting.",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureQuickCopy": {
-    "message": "Copy",
-    "description": "Capture progress window: quick-action button that copies the screenshot to the clipboard."
-  },
-  "captureQuickCopyTitle": {
-    "message": "Copy to clipboard",
-    "description": "Capture progress window: tooltip for the Copy quick action."
-  },
-  "captureQuickPng": {
-    "message": "PNG",
-    "description": "Capture progress window: quick-action button that downloads the screenshot as PNG."
-  },
-  "captureQuickPngTitle": {
-    "message": "Download as PNG",
-    "description": "Capture progress window: tooltip for the PNG quick action."
-  },
-  "captureQuickPdf": {
-    "message": "PDF",
-    "description": "Capture progress window: quick-action button that saves the screenshot as PDF via the editor."
-  },
-  "captureQuickPdfTitle": {
-    "message": "Download as PDF",
-    "description": "Capture progress window: tooltip for the PDF quick action."
-  },
-  "captureBack": {
-    "message": "Back to capture",
-    "description": "Settings: return to the capture dialog that opened this tab."
-  },
   "restrictedTitle": {
     "message": "This page can’t be captured",
     "description": "Toolbar popup shown on browser-restricted pages."
@@ -2641,46 +2609,6 @@
   "supportBody": {
     "description": "Optional project support and rating message.",
     "message": "PageGrab is completely open source. If it’s useful to you, a donation helps support its development—and a quick rating helps others find it."
-  },
-  "capturePasteHint": {
-    "message": "Paste it anywhere with ⌘V / Ctrl+V.",
-    "description": "Capture progress window: how to paste a copied screenshot."
-  },
-  "captureDownloadHint": {
-    "message": "If it doesn’t start,",
-    "description": "Capture progress window: download retry hint, followed by a download again button."
-  },
-  "captureDownloadAgain": {
-    "message": "download again",
-    "description": "Capture progress window: button to retry the PNG download."
-  },
-  "captureReportTitle": {
-    "message": "Help diagnose this capture error",
-    "description": "Popup error report heading."
-  },
-  "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve PageGrab.",
-    "description": "Popup error report explanation."
-  },
-  "captureReportDetails": {
-    "message": "Technical details (optional)",
-    "description": "Popup error report detail label."
-  },
-  "captureReportSend": {
-    "message": "Send error report",
-    "description": "Popup error report submit button."
-  },
-  "captureReportSending": {
-    "message": "Sending…",
-    "description": "Popup error report loading state."
-  },
-  "captureReportSent": {
-    "message": "Thanks — the error report was sent.",
-    "description": "Popup error report success message."
-  },
-  "captureReportFailed": {
-    "message": "Couldn’t send the report. Check your connection and try again.",
-    "description": "Popup error report failure message."
   },
   "ctlPageTitle": {
     "message": "Record a tab",

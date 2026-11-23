@@ -2513,6 +2513,18 @@
     "message": "Screenshot wird aufgenommen…",
     "description": "Capture overlay status."
   },
+  "captureStop": {
+    "message": "Hier stoppen",
+    "description": "Popup button shown during a full-page capture; ends it early and keeps the part captured so far."
+  },
+  "captureStopTitle": {
+    "message": "Screenshot hier beenden und das bisher Aufgenommene behalten. Du kannst auch auf der Seite Esc drücken.",
+    "description": "Tooltip for the Stop button."
+  },
+  "captureStopping": {
+    "message": "Wird gestoppt…",
+    "description": "Stop button label after it is pressed, while the capture finishes."
+  },
   "captureOverlayDetail": {
     "message": "Lass diesen Tab geöffnet, während die Seite aufgenommen wird.",
     "description": "Capture overlay status."
@@ -2566,50 +2578,6 @@
   "settingsStopRecording": {
     "message": "Aufnahme stoppen"
   },
-  "captureReady": {
-    "message": "Screenshot bereit",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureOpenEditor": {
-    "message": "Editor öffnen",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureCopied": {
-    "message": "Screenshot in die Zwischenablage kopiert!",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureSaved": {
-    "message": "Der Download deines Screenshots startet.",
-    "description": "Capture progress window: completion status or action."
-  },
-  "captureQuickCopy": {
-    "message": "Kopieren",
-    "description": "Capture progress window: quick-action button that copies the screenshot to the clipboard."
-  },
-  "captureQuickCopyTitle": {
-    "message": "In die Zwischenablage kopieren",
-    "description": "Capture progress window: tooltip for the Copy quick action."
-  },
-  "captureQuickPng": {
-    "message": "PNG",
-    "description": "Capture progress window: quick-action button that downloads the screenshot as PNG."
-  },
-  "captureQuickPngTitle": {
-    "message": "Als PNG herunterladen",
-    "description": "Capture progress window: tooltip for the PNG quick action."
-  },
-  "captureQuickPdf": {
-    "message": "PDF",
-    "description": "Capture progress window: quick-action button that saves the screenshot as PDF via the editor."
-  },
-  "captureQuickPdfTitle": {
-    "message": "Als PDF speichern",
-    "description": "Capture progress window: tooltip for the PDF quick action."
-  },
-  "captureBack": {
-    "message": "Zurück zur Aufnahme",
-    "description": "Settings: return to the capture dialog that opened this tab."
-  },
   "restrictedTitle": {
     "message": "Diese Seite kann nicht aufgenommen werden",
     "description": "Toolbar popup shown on browser-restricted pages."
@@ -2641,39 +2609,6 @@
   "supportBody": {
     "description": "Optional project support and rating message.",
     "message": "PageGrab ist vollständig Open Source. Wenn es dir hilft, unterstützt eine Spende die Weiterentwicklung – und eine kurze Bewertung hilft anderen, es zu entdecken."
-  },
-  "capturePasteHint": {
-    "message": "Mit ⌘V / Strg+V überall einfügen.",
-    "description": "Capture progress window: how to paste a copied screenshot."
-  },
-  "captureDownloadHint": {
-    "message": "Falls er nicht startet,",
-    "description": "Capture progress window: download retry hint, followed by a download again button."
-  },
-  "captureDownloadAgain": {
-    "message": "erneut herunterladen",
-    "description": "Capture progress window: button to retry the PNG download."
-  },
-  "captureReportTitle": {
-    "message": "Help diagnose this capture error"
-  },
-  "captureReportBody": {
-    "message": "Review the details, then send an anonymous error report to help improve PageGrab."
-  },
-  "captureReportDetails": {
-    "message": "Technical details (optional)"
-  },
-  "captureReportSend": {
-    "message": "Send error report"
-  },
-  "captureReportSending": {
-    "message": "Sending…"
-  },
-  "captureReportSent": {
-    "message": "Thanks — the error report was sent."
-  },
-  "captureReportFailed": {
-    "message": "Couldn’t send the report. Check your connection and try again."
   },
   "ctlPageTitle": {
     "message": "Tab aufnehmen",

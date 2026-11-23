@@ -4,6 +4,7 @@ import {
   computeScrollPositions,
   MAX_CANVAS_HEIGHT_PX,
   splitHeight,
+  truncateParts,
 } from '../../src/shared/geometry';
 
 describe('computeScrollPositions', () => {
@@ -108,5 +109,25 @@ describe('splitHeight', () => {
       expect(p.top).toBe(i === 0 ? 0 : parts[i - 1].top + parts[i - 1].height),
     );
     expect(parts.reduce((sum, p) => sum + p.height, 0)).toBe(height);
+  });
+});
+
+describe('truncateParts', () => {
+  const parts = [
+    { top: 0, height: 1000 },
+    { top: 1000, height: 1000 },
+    { top: 2000, height: 1000 },
+  ];
+  it('ends the kept part at the stop line and drops the parts below it', () => {
+    expect(truncateParts(parts, 1500)).toEqual([
+      { top: 0, height: 1000 },
+      { top: 1000, height: 500 },
+    ]);
+  });
+  it('drops a part that would start exactly at the stop line', () => {
+    expect(truncateParts(parts, 1000)).toEqual([{ top: 0, height: 1000 }]);
+  });
+  it('leaves parts unchanged when the stop line is at or past the end', () => {
+    expect(truncateParts(parts, 5000)).toEqual(parts);
   });
 });

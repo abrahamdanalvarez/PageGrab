@@ -379,7 +379,7 @@ async function healOverlay(tabId: number): Promise<'fresh' | 'synced' | 'failed'
 
 /**
  * Tear down the in-page cursor logger. It parks its own cleanup on
- * `window.__ossRecOverlay`; without this call its listeners and heartbeat
+ * `window.__pagegrabRecOverlay`; without this call its listeners and heartbeat
  * survive the recording until the tab navigates.
  */
 async function unmountOverlay(tabId: number): Promise<void> {
@@ -387,8 +387,8 @@ async function unmountOverlay(tabId: number): Promise<void> {
     await chrome.scripting.executeScript({
       target: { tabId },
       func: () => {
-        const w = window as unknown as { __ossRecOverlay?: () => void };
-        if (typeof w.__ossRecOverlay === 'function') w.__ossRecOverlay();
+        const w = window as unknown as { __pagegrabRecOverlay?: () => void };
+        if (typeof w.__pagegrabRecOverlay === 'function') w.__pagegrabRecOverlay();
       },
     });
   } catch {

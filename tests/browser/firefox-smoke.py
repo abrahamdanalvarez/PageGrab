@@ -69,7 +69,7 @@ def main():
         def history():
             return api('return (await chrome.storage.local.get("pagegrab:captures"))["pagegrab:captures"] || [];')
 
-        def new_editor(previous, via_progress=False):
+        def new_editor(previous):
             def find_page(path):
                 for handle in set(driver.window_handles) - previous:
                     try:
@@ -80,16 +80,8 @@ def main():
                         continue
                 return False
 
-            if via_progress:
-                dialog = wait.until(lambda _d: find_page('/src/progress/index.html'))
-                button = wait.until(lambda d: next(iter(d.find_elements(
-                    By.CSS_SELECTOR, '#open:not([hidden])')), False))
-                assert button.text == 'Open editor', button.text
-                button.click()
             wait.until(lambda _d: find_page('/src/editor/index.html'))
             wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, 'canvas'))
-            if via_progress:
-                wait.until(lambda d: dialog not in d.window_handles)
 
         try:
             driver.install_addon(str(ROOT / f'pagegrab-firefox-v{VERSION}.zip'), temporary=True)
@@ -118,7 +110,7 @@ def main():
             ''')
             driver.find_element(By.ID, 'pagegrab_personal_local-BAP').click()
             driver.set_context('content')
-            new_editor(previous, via_progress=True)
+            new_editor(previous)
             entry = history()[0]
             assert entry['mode'] == 'full-page' and entry['height'] >= 2300, entry
             assert entry['thumbnail'].startswith('data:image/jpeg;base64,')

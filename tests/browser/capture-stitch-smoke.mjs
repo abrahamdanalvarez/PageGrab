@@ -140,7 +140,7 @@ try {
     const main = document.querySelector('#main');
     const result = {
       metrics,
-      tagged: main.dataset.ossScroller,
+      tagged: main.dataset.pagegrabScroller,
       visibility: getComputedStyle(main).visibility,
     };
     window.captureModule.restoreCapture();
