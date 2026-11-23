@@ -727,7 +727,7 @@ async function captureFullPage(tab: chrome.tabs.Tab): Promise<void> {
     // last part (and a page that fits one image) stitches here.
     await flushParts(Infinity);
     const delivered = multiPart
-      ? await deliverCaptureParts(captureIds, windowId)
+      ? await deliverCaptureParts(captureIds, windowId, tabId)
       : await deliverCapture(
           tabId,
           firstPartUrl,
@@ -786,6 +786,19 @@ async function removeCaptureProgress(tabId: number): Promise<void> {
  * only on `true`, so a failed clipboard copy doesn't chase its own `CAPTURE_ERROR`
  * with a completion message (the popup closes itself on `CAPTURE_COMPLETE`).
  */
+/**
+ * Where an editor tab opens: right after the captured tab, not at the end of
+ * the strip. Empty when that tab is gone, so the editor still opens.
+ */
+async function besideTab(tabId: number): Promise<{ index?: number; openerTabId?: number }> {
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    return { index: tab.index + 1, openerTabId: tabId };
+  } catch {
+    return {};
+  }
+}
+
 async function deliverCapture(
   tabId: number,
   dataUrl: string,
@@ -809,7 +822,7 @@ async function deliverCapture(
   const action = normalizeCaptureAction(settings.captureAction);
 
   if (action === 'editor') {
-    await chrome.tabs.create({ url: EDITOR_URL, windowId });
+    await chrome.tabs.create({ url: EDITOR_URL, windowId, ...(await besideTab(tabId)) });
     // The editor tab is the confirmation, so any progress badge left by a
     // full-page stitch hands the badge back here. The clipboard and download
     // branches below end on their own tick instead.
@@ -852,7 +865,11 @@ async function deliverCapture(
  * Deliver a full-page capture split into several stored parts. The clipboard
  * holds one image, so that action opens every part in the editor, one tab per part.
  */
-async function deliverCaptureParts(captureIds: string[], windowId: number): Promise<boolean> {
+async function deliverCaptureParts(
+  captureIds: string[],
+  windowId: number,
+  tabId: number,
+): Promise<boolean> {
   const settings = await getSettings();
   if (normalizeCaptureAction(settings.captureAction) === 'download') {
     try {
@@ -873,8 +890,14 @@ async function deliverCaptureParts(captureIds: string[], windowId: number): Prom
     void flashDoneBadge();
     return true;
   }
+  const beside = await besideTab(tabId);
   for (const [i, id] of captureIds.entries()) {
-    await chrome.tabs.create({ url: `${EDITOR_URL}?capture=${id}`, windowId, active: i === 0 });
+    await chrome.tabs.create({
+      url: `${EDITOR_URL}?capture=${id}`,
+      windowId,
+      active: i === 0,
+      ...(beside.index === undefined ? {} : { ...beside, index: beside.index + i }),
+    });
   }
   await restoreRecBadge();
   return true;

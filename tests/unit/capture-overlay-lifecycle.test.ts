@@ -89,11 +89,12 @@ function makeChrome() {
       query: async () => [
         { id: sourceTabActive ? 7 : 8, windowId: 1, url: 'https://example.com', title: 'Example' },
       ],
-      create: async (details: { windowId: number }) => {
+      get: async (id: number) => ({ id, index: 3, windowId: 1 }),
+      create: vi.fn(async (details: { windowId: number }) => {
         expect(details.windowId).toBe(1);
         events.push('deliver');
         if (failAt === 'deliver') throw new Error('delivery failed');
-      },
+      }),
       captureVisibleTab: async (windowId: number) => {
         expect(windowId).toBe(1);
         events.push('snapshot');
@@ -215,6 +216,13 @@ describe('screenshot capture overlay lifecycle', () => {
     expect(events.indexOf('stitchTiles')).toBeLessThan(events.lastIndexOf('overlay:remove'));
     expect(events).toContain('overlay:remove');
     expect(messages.some((m) => m.type === 'CAPTURE_COMPLETE')).toBe(true);
+  });
+
+  it('opens the editor tab right after the captured tab', async () => {
+    await capture();
+    expect(fakeChrome.tabs.create).toHaveBeenCalledWith(
+      expect.objectContaining({ index: 4, openerTabId: 7 }),
+    );
   });
 
   it.each(['snapshot:1', 'snapshot:2', 'prepareCapture', 'stitchTiles', 'deliver'])(
