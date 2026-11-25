@@ -608,6 +608,13 @@ export function App() {
               ed.onCanvasMouseDown(e);
             }}
             onDblClick={ed.onCanvasDoubleClick}
+            // The canvas only paints the visible viewport, so the browser's own
+            // "Copy image" would grab just that; copy the full composed image instead.
+            onContextMenu={(e) => {
+              if (!ed.hasImage) return;
+              e.preventDefault();
+              copyToClipboard();
+            }}
             onKeyDown={ed.onCanvasKeyDown}
           >
             <p>
